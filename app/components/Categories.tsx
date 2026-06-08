@@ -46,7 +46,7 @@ export function Categories() {
       setLoading(true);
       setError(null);
 
-      const res = await fetch(`${apiUrl}/titles`);
+      const res = await fetch("/api/titles");
       if (!res.ok) throw new Error("Failed to fetch data");
 
       const data: ApiResponse = await res.json();
@@ -54,21 +54,20 @@ export function Categories() {
 
       const bestByGenre: Record<string, ApiTitle> = {};
 
+      const usedImages = new Set<string>();
+
       for (const title of titles) {
         if (title.type !== "tvSeries") continue;
 
         for (const genre of title.genres ?? []) {
           if (!genres.includes(genre)) continue;
+          if (bestByGenre[genre]) continue; // already filled this genre
 
-          const current = bestByGenre[genre];
+          const imageUrl = title.primaryImage?.url;
+          if (!imageUrl || usedImages.has(imageUrl)) continue;
 
-          if (
-              !current ||
-              (title.rating?.aggregateRating || 0) >
-              (current.rating?.aggregateRating || 0)
-          ) {
-            bestByGenre[genre] = title;
-          }
+          bestByGenre[genre] = title;
+          usedImages.add(imageUrl);
         }
       }
 

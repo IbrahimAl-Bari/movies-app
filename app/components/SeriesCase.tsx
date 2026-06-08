@@ -23,7 +23,7 @@ const SeriesCase = () => {
             scrollTrigger: {
                 trigger: container.current,
                 start: "center center",
-                end: '+=1500',
+                end: '+=2000',
                 scrub: 1,
                 pin: true,
                 // @ts-ignore

@@ -9,6 +9,8 @@ import { SplitText } from 'gsap/SplitText';
 import { useGSAP } from '@gsap/react';
 import {CTASection} from "@/app/components/CTASection";
 import SeriesCase from "@/app/components/SeriesCase";
+import Board from "@/app/components/Board";
+
 gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP)
 
 export default function App() {
@@ -18,6 +20,7 @@ export default function App() {
         <Hero />
         <ShowCase />
         <SeriesCase />
+        <Board />
         <Categories />
         {/*<CTASection />*/}
         <Footer />
