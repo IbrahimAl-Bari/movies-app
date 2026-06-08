@@ -2,110 +2,33 @@
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, LucideStar, CircleArrowLeft } from "lucide-react";
+import { Calendar, Star, CircleArrowLeft } from "lucide-react";
+import { BoardSkeleton } from "./Skeleton";
+import { useTitles } from "@/app/hooks/useApi";
 
-interface RatingObject {
-    aggregateRating: number | string;
-    voteCount?: number;
-}
+function useIsMobile() {
+    const [isMobile, setIsMobile] = useState(false);
 
-type Rating = RatingObject | number | string;
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768);
+        check();
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
+    }, []);
 
-interface PrimaryImage {
-    url: string;
-}
-
-interface TitleItem {
-    id: string | number;
-    type: string;
-    primaryImage: PrimaryImage;
-    originalTitle: string;
-    rating: Rating;
-    startYear: string;
-}
-
-interface ApiResponse {
-    titles: TitleItem[];
+    return isMobile;
 }
 
 export default function Board() {
-    const [data, setData] = useState<TitleItem[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data, loading, error } = useTitles(8.6);
+    const isMobile = useIsMobile();
 
-    useEffect(() => {
-        let cancelled = false;
-
-        async function fetchPopular() {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const res = await fetch("/api/titles");
-
-                if (!res.ok) {
-                    throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
-                }
-
-                const json: ApiResponse = await res.json();
-
-                const titles = (json?.titles ?? []).filter((t) => {
-                    const ratingValue =
-                        typeof t.rating === "object" && t.rating !== null
-                            ? Number(t.rating.aggregateRating)
-                            : Number(t.rating);
-
-                    return ratingValue >= 8.6;
-                });
-
-                if (!cancelled) {
-                    setData(titles);
-                }
-            } catch (err) {
-                if (!cancelled) {
-                    const message =
-                        err instanceof Error ? err.message : "Failed to load popular titles";
-                    setError(message);
-                }
-            } finally {
-                if (!cancelled) {
-                    setLoading(false);
-                }
-            }
-        }
-
-        fetchPopular();
-
-        return () => {
-            cancelled = true;
-        };
-    }, []);
-
-    function renderRating(rating: Rating) {
-        if (typeof rating === "object" && rating !== null) {
-            return rating.aggregateRating;
-        }
-        return rating;
-    }
-
-    if (loading) {
-        return (
-            <div className="w-full h-175 flex items-center justify-center bg-[#0f0f12] text-white">
-                Loading...
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="w-full h-175 flex items-center justify-center bg-[#0f0f12] text-red-400">
-                {error}
-            </div>
-        );
-    }
-
-    const isMobile =
-        typeof window !== "undefined" && window.innerWidth < 768;
+    if (loading) return <BoardSkeleton />;
+    if (error) return (
+        <div className="w-full h-175 flex items-center justify-center bg-[#0f0f12] text-red-400">
+            {error}
+        </div>
+    );
 
     const positions = isMobile
         ? [
@@ -129,15 +52,11 @@ export default function Board() {
                 className="absolute inset-0 bg-[#111111]"
                 style={{
                     backgroundImage: `
-                 radial-gradient(circle at center, rgba(255,255,255,0.05), transparent 70%),
-                 linear-gradient(rgba(255,214,10,0.1) 1px, transparent 1px),
-                 linear-gradient(90deg, rgba(255,214,10,0.1) 1px, transparent 1px)
-                  `,
-                    backgroundSize: `
-                 auto,
-                 40px 40px,
-                40px 40px
-                  `,
+            radial-gradient(circle at center, rgba(255,255,255,0.05), transparent 70%),
+            linear-gradient(rgba(255,214,10,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,214,10,0.1) 1px, transparent 1px)
+          `,
+                    backgroundSize: "auto, 40px 40px, 40px 40px",
                 }}
             />
 
@@ -155,11 +74,7 @@ export default function Board() {
             </div>
 
             {data.slice(0, 5).map((item, index) => {
-                const position = positions[index] ?? {
-                    x: 0,
-                    y: 0,
-                    rotate: 0,
-                };
+                const position = positions[index] ?? { x: 0, y: 0, rotate: 0 };
 
                 return (
                     <motion.div
@@ -167,20 +82,13 @@ export default function Board() {
                         drag
                         dragMomentum={false}
                         dragElastic={0}
-                        whileDrag={{
-                            scale: 1.05,
-                            zIndex: 50,
-                        }}
-                        initial={{
-                            x: position.x,
-                            y: position.y,
-                            rotate: position.rotate,
-                        }}
+                        whileDrag={{ scale: 1.05, zIndex: 50 }}
+                        initial={{ x: position.x, y: position.y, rotate: position.rotate }}
                         className="absolute z-10 cursor-grab active:cursor-grabbing rounded-2xl"
                     >
                         <div className="w-45 h-60 rounded-[10px] bg-[#FFD60A] overflow-hidden border-r-10 border-b-10 border-black shadow-[10px_10px_0px_0px_#FF4D4D]">
                             <img
-                                src={item.primaryImage?.url}
+                                src={item.primaryImage}
                                 alt={item.originalTitle || "Unknown Title"}
                                 className="w-40 mx-auto mt-1 h-40 object-cover rounded-[10px]"
                                 draggable={false}
@@ -192,8 +100,8 @@ export default function Board() {
 
                             <div className="w-full font-black uppercase tracking-tight mt-1 flex justify-around text-black text-xs">
                                 <div className="flex gap-2">
-                                    <LucideStar className="text-black w-4 h-4" />
-                                    <span>{renderRating(item.rating)}</span>
+                                    <Star className="text-black w-4 h-4" />
+                                    <span>{item.rating}</span>
                                 </div>
 
                                 <div className="flex gap-2">

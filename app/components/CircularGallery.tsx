@@ -56,10 +56,10 @@ async function loadFontFromStylesheet(url: string): Promise<string> {
   }
   if (!family) throw new Error('No @font-face rule found in the stylesheet');
   await Promise.allSettled(
-    fontFaces.map(async face => {
-      await face.load();
-      document.fonts.add(face);
-    })
+      fontFaces.map(async face => {
+        await face.load();
+        document.fonts.add(face);
+      })
   );
   return family;
 }
@@ -77,23 +77,15 @@ async function loadCustomFont(fontUrl: string): Promise<string> {
   return isStylesheet ? loadFontFromStylesheet(fontUrl) : loadFontFromFile(fontUrl);
 }
 
-// Loads `fontUrl` (a stylesheet such as a Google Fonts URL, or a direct font
-// file) and returns a canvas-ready font string that keeps the size/weight from
-// `font` but swaps in the freshly loaded family. Falls back to `font` on error.
 async function resolveFont(font: string, fontUrl?: string): Promise<string> {
-  // Use the bundled Figtree stylesheet when the caller relies on the default
-  // font, otherwise honor the explicit `fontUrl`.
   const effectiveUrl = fontUrl || (font === DEFAULT_FONT ? DEFAULT_FONT_URL : null);
   if (!effectiveUrl) {
-    // A custom family was supplied without a URL – make sure it is ready (in
-    // case the host page declares it) before we draw it to the canvas,
-    // otherwise the first paint silently falls back to a system font.
     if (document.fonts && document.fonts.load) {
       try {
         await document.fonts.load(font);
         await document.fonts.ready;
       } catch {
-        // Ignore – fall back to whatever the browser provides.
+        // Ignore
       }
     }
     return font;
@@ -107,7 +99,7 @@ async function resolveFont(font: string, fontUrl?: string): Promise<string> {
       try {
         await document.fonts.load(resolved);
       } catch {
-        // Ignore – we still attempt to render with the requested font.
+        // Ignore
       }
     }
     return resolved;
@@ -123,10 +115,10 @@ function getFontSize(font: string): number {
 }
 
 function createTextTexture(
-  gl: GL,
-  text: string,
-  font: string = 'bold 30px monospace',
-  color: string = 'black'
+    gl: GL,
+    text: string,
+    font: string = 'bold 30px monospace',
+    color: string = 'black'
 ): { texture: Texture; width: number; height: number } {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
@@ -276,21 +268,21 @@ class Media {
   isAfter: boolean = false;
 
   constructor({
-    geometry,
-    gl,
-    image,
-    index,
-    length,
-    renderer,
-    scene,
-    screen,
-    text,
-    viewport,
-    bend,
-    textColor,
-    borderRadius = 0,
-    font
-  }: MediaProps) {
+                geometry,
+                gl,
+                image,
+                index,
+                length,
+                renderer,
+                scene,
+                screen,
+                text,
+                viewport,
+                bend,
+                textColor,
+                borderRadius = 0,
+                font
+              }: MediaProps) {
     this.geometry = geometry;
     this.gl = gl;
     this.image = image;
@@ -341,12 +333,12 @@ class Media {
         uniform sampler2D tMap;
         uniform float uBorderRadius;
         varying vec2 vUv;
-        
+
         float roundedBoxSDF(vec2 p, vec2 b, float r) {
           vec2 d = abs(p) - b;
           return length(max(d, vec2(0.0))) + min(max(d.x, d.y), 0.0) - r;
         }
-        
+
         void main() {
           vec2 ratio = vec2(
             min((uPlaneSizes.x / uPlaneSizes.y) / (uImageSizes.x / uImageSizes.y), 1.0),
@@ -357,13 +349,12 @@ class Media {
             vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
           );
           vec4 color = texture2D(tMap, uv);
-          
+
           float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
-          
-          // Smooth antialiasing for edges
+
           float edgeSmooth = 0.002;
           float alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
-          
+
           gl_FragColor = vec4(color.rgb, alpha);
         }
       `,
@@ -451,8 +442,9 @@ class Media {
     if (screen) this.screen = screen;
     if (viewport) {
       this.viewport = viewport;
-      if (this.plane.program.uniforms.uViewportSizes) {
-        this.plane.program.uniforms.uViewportSizes.value = [this.viewport.width, this.viewport.height];
+      const uniforms = this.plane.program.uniforms as Record<string, any>;
+      if (uniforms.uViewportSizes) {
+        uniforms.uViewportSizes.value = [this.viewport.width, this.viewport.height];
       }
     }
     this.scale = this.screen.height / 1500;
@@ -508,16 +500,16 @@ class App {
   start: number = 0;
 
   constructor(
-    container: HTMLElement,
-    {
-      items,
-      bend = 1,
-      textColor = '#ffffff',
-      borderRadius = 0,
-      font = 'bold 30px Figtree',
-      scrollSpeed = 2,
-      scrollEase = 0.05
-    }: AppConfig
+      container: HTMLElement,
+      {
+        items,
+        bend = 1,
+        textColor = '#ffffff',
+        borderRadius = 0,
+        font = 'bold 30px Figtree',
+        scrollSpeed = 2,
+        scrollEase = 0.05
+      }: AppConfig
   ) {
     document.documentElement.classList.remove('no-js');
     this.container = container;
@@ -563,37 +555,19 @@ class App {
   }
 
   createMedias(
-    items: { image: string; text: string }[] | undefined,
-    bend: number = 1,
-    textColor: string,
-    borderRadius: number,
-    font: string
+      items: { image: string; text: string }[] | undefined,
+      bend: number = 1,
+      textColor: string,
+      borderRadius: number,
+      font: string
   ) {
     const defaultItems = [
-      {
-        image: `https://picsum.photos/seed/1/800/600?grayscale`,
-        text: 'Action'
-      },
-      {
-        image: `https://picsum.photos/seed/2/800/600?grayscale`,
-        text: 'Sci-Fi'
-      },
-      {
-        image: `https://picsum.photos/seed/3/800/600?grayscale`,
-        text: 'Horror'
-      },
-      {
-        image: `https://picsum.photos/seed/4/800/600?grayscale`,
-        text: 'Comedy'
-      },
-      {
-        image: `https://picsum.photos/seed/5/800/600?grayscale`,
-        text: 'Drama'
-      },
-      {
-        image: `https://picsum.photos/seed/16/800/600?grayscale`,
-        text: 'Animation'
-      },
+      { image: `https://picsum.photos/seed/1/800/600?grayscale`, text: 'Action' },
+      { image: `https://picsum.photos/seed/2/800/600?grayscale`, text: 'Sci-Fi' },
+      { image: `https://picsum.photos/seed/3/800/600?grayscale`, text: 'Horror' },
+      { image: `https://picsum.photos/seed/4/800/600?grayscale`, text: 'Comedy' },
+      { image: `https://picsum.photos/seed/5/800/600?grayscale`, text: 'Drama' },
+      { image: `https://picsum.photos/seed/16/800/600?grayscale`, text: 'Animation' },
     ];
     const galleryItems = items && items.length ? items : defaultItems;
     this.mediasImages = galleryItems.concat(galleryItems);
@@ -637,7 +611,7 @@ class App {
 
   onWheel(e: Event) {
     const wheelEvent = e as WheelEvent;
-    const delta = wheelEvent.deltaY || (wheelEvent as any).wheelDelta || (wheelEvent as any).detail;
+    const delta = wheelEvent.deltaY;
     this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
     this.onCheckDebounce();
   }
@@ -707,8 +681,9 @@ class App {
     window.removeEventListener('touchstart', this.boundOnTouchDown);
     window.removeEventListener('touchmove', this.boundOnTouchMove);
     window.removeEventListener('touchend', this.boundOnTouchUp);
-    if (this.renderer && this.renderer.gl && this.renderer.gl.canvas.parentNode) {
-      this.renderer.gl.canvas.parentNode.removeChild(this.renderer.gl.canvas as HTMLCanvasElement);
+    const canvas = this.renderer.gl.canvas as HTMLCanvasElement;
+    if (canvas.parentNode) {
+      canvas.parentNode.removeChild(canvas);
     }
   }
 }
@@ -725,15 +700,15 @@ interface CircularGalleryProps {
 }
 
 export default function CircularGallery({
-  items,
-  bend = 3,
-  textColor = '#ffffff',
-  borderRadius = 0.05,
-  font = 'bold 30px Figtree',
-  fontUrl,
-  scrollSpeed = 2,
-  scrollEase = 0.05
-}: CircularGalleryProps) {
+                                          items,
+                                          bend = 3,
+                                          textColor = '#ffffff',
+                                          borderRadius = 0.05,
+                                          font = 'bold 30px Figtree',
+                                          fontUrl,
+                                          scrollSpeed = 2,
+                                          scrollEase = 0.05
+                                        }: CircularGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!containerRef.current) return;
