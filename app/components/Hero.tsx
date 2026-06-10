@@ -8,7 +8,6 @@ import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import GridMotion from "./GridMotion";
 import { ErrorBoundary } from "./ErrorBoundary";
-import Loading from "@/app/loading";
 
 gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP);
 
@@ -80,25 +79,6 @@ export function Hero() {
     const [data, setData] = useState<TitleItem[]>([]);
     const [error, setError] = useState<string | null>(null);
 
-    // GSAP animations for buttons
-    useGSAP(
-        () => {
-            gsap.from(".btn-watch", {
-                boxShadow: "0px 0px 0px 0px #FF4D4D",
-                duration: 0.6,
-                ease: "power3.out",
-            });
-
-            gsap.from(".btn-browse", {
-                boxShadow: "0px 0px 0px 0px #FFD60A",
-                duration: 0.6,
-                ease: "power3.out",
-            });
-        },
-        { scope: buttonsRef }
-    );
-
-    // GSAP animations for text
     useGSAP(
         () => {
             const split = SplitText.create(".fade-in", {
@@ -124,7 +104,7 @@ export function Hero() {
                 split.revert();
             };
         },
-        { scope: container }
+        {scope: container}
     );
 
     const fetchData = async (): Promise<void> => {
@@ -157,14 +137,13 @@ export function Hero() {
     const imageUrls = data.map((m) => m.primaryImage).filter(Boolean);
 
     return (
+        <>
         <section
             ref={container}
             className="relative overflow-hidden border-b-[6px] h-screen w-screen z-0 border-black bg-[#111111]"
         >
             <ErrorBoundary>
-                <Suspense fallback={<Loading />}>
-                <GridMotion  items={imageUrls} gradientColor="black" />
-                </Suspense>
+                    <GridMotion items={imageUrls} gradientColor="black"/>
             </ErrorBoundary>
 
             <div className="h-full z-10 w-full flex flex-col py-20 px-6 justify-center items-center">
@@ -176,14 +155,14 @@ export function Hero() {
                         lineHeight: 0.9,
                     }}
                 >
-                    Discover Your <br /> Next Favorite Movie
+                    Discover Your <br/> Next Favorite Movie
                 </h1>
 
                 <p
                     className="paragraph mb-8 text-center font-bold leading-relaxed text-white/70"
-                    style={{ fontSize: "1.25rem", fontWeight: 700 }}
+                    style={{fontSize: "1.25rem", fontWeight: 700}}
                 >
-                    Stream thousands of blockbusters, indie gems, <br /> and cult
+                    Stream thousands of blockbusters, indie gems, <br/> and cult
                     classics. Your ultimate cinematic experience starts here.
                 </p>
 
@@ -191,17 +170,20 @@ export function Hero() {
                     ref={buttonsRef}
                     className="mt-10 flex justify-center flex-wrap gap-4"
                 >
-                    <button className="btn-watch flex items-center gap-2 border-4 border-black bg-[#FFD60A] px-8 py-4 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FF4D4D] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#FF4D4D]">
-                        <TvMinimalPlay className="h-6 w-6 fill-black" />
+                    <button
+                        className="btn-watch flex items-center gap-2 border-4 border-black bg-[#FFD60A] px-8 py-4 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FF4D4D] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#FF4D4D]">
+                        <TvMinimalPlay className="h-6 w-6 fill-black"/>
                         Watch Now
                     </button>
 
-                    <button className="btn-browse flex items-center gap-2 border-4 border-black bg-white px-8 py-4 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FFD60A] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#FFD60A]">
-                        <List className="h-6 w-6" />
+                    <button
+                        className="btn-browse flex items-center gap-2 border-4 border-black bg-white px-8 py-4 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FFD60A] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#FFD60A]">
+                        <List className="h-6 w-6"/>
                         Browse Collection
                     </button>
                 </div>
             </div>
         </section>
-    );
+        </>
+    )
 }

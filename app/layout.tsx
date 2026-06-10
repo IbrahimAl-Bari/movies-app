@@ -31,7 +31,7 @@ export default async function RootLayout(
         >
         <body className="min-h-full flex flex-col">
         <main className={"relative overflow-hidden"}>
-            {children}
+                {children}
         </main>
         </body>
         </html>

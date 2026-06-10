@@ -22,7 +22,7 @@ export default function App() {
         <SeriesCase />
         <Board />
         <Categories />
-        {/*<CTASection />*/}
+        <CTASection />
         <Footer />
     </div>
   );

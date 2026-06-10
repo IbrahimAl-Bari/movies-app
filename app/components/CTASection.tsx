@@ -2,9 +2,9 @@ import { Play, ArrowRight } from "lucide-react";
 
 export function CTASection() {
   return (
-      <section className="border-b-[6px] border-black bg-[#FFD60A] px-6 py-20">
+      <section className="border-b-[6px] border-black px-6 py-20">
         <div className="mx-auto max-w-5xl text-center">
-          <div className="mb-6 inline-block rotate-[-2deg] border-4 border-black bg-[#FF4D4D] px-6 py-3 shadow-[6px_6px_0px_0px_#000000]">
+          <div className="mb-6 inline-block -rotate-2 border-4 border-black bg-[#FF4D4D] px-6 py-3 shadow-[6px_6px_0px_0px_#000000]">
             <span className="font-black uppercase tracking-tight text-black" style={{ fontWeight: 900 }}>Limited Offer</span>
           </div>
 
@@ -17,12 +17,12 @@ export function CTASection() {
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <button className="flex items-center gap-2 border-[6px] border-black bg-black px-10 py-5 font-black uppercase tracking-tight text-[#FFD60A] shadow-[10px_10px_0px_0px_#FF4D4D] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[8px_8px_0px_0px_#FF4D4D]" style={{ fontWeight: 900, fontSize: '1.25rem' }}>
+            <button className="flex items-center gap-2 border-[6px] border-black bg-[#FFD60A] px-10 py-5 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FF4D4D] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[8px_8px_0px_0px_#FF4D4D]" style={{ fontWeight: 900, fontSize: '1.25rem' }}>
               <Play className="h-7 w-7 fill-current" />
-              Start Free Trial
+              Start For Free
             </button>
 
-            <button className="flex items-center gap-2 border-[6px] border-black bg-white px-10 py-5 font-black uppercase tracking-tight text-black shadow-[10px_10px_0px_0px_#000000] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[8px_8px_0px_0px_#000000]" style={{ fontWeight: 900, fontSize: '1.25rem' }}>
+            <button className="flex items-center gap-2 border-[6px] border-black bg-white px-10 py-5 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FFD60A] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[8px_8px_0px_0px_#000000]" style={{ fontWeight: 900, fontSize: '1.25rem' }}>
               Learn More
               <ArrowRight className="h-7 w-7" />
             </button>
@@ -30,7 +30,7 @@ export function CTASection() {
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-6">
             <div className="border-4 border-black bg-white px-6 py-3">
-              <p className="font-black uppercase" style={{ fontWeight: 900 }}>
+              <p className="font-black uppercase text-black" style={{ fontWeight: 900 }}>
                 <span style={{ fontSize: '2rem' }}>10K+</span>
                 <br />
                 Movies
@@ -43,8 +43,8 @@ export function CTASection() {
                 Quality
               </p>
             </div>
-            <div className="border-4 border-black bg-white px-6 py-3">
-              <p className="font-black uppercase" style={{ fontWeight: 900 }}>
+            <div className="border-4 border-black bg-[#FFD60A] px-6 py-3">
+              <p className="font-black uppercase text-[#FF4D4D]" style={{ fontWeight: 900 }}>
                 <span style={{ fontSize: '2rem' }}>24/7</span>
                 <br />
                 Streaming
