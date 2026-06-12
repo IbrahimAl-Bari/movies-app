@@ -1,3 +1,5 @@
+"use client"
+
 import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
 import { useEffect, useRef } from 'react';
 
@@ -731,5 +733,6 @@ export default function CircularGallery({
       if (app) app.destroy();
     };
   }, [items, bend, textColor, borderRadius, font, fontUrl, scrollSpeed, scrollEase]);
-  return <div className="w-full h-full overflow-hidden cursor-grab active:cursor-grabbing" ref={containerRef} />;
-}
+  return (
+    <div className="w-full h-full overflow-hidden cursor-grab active:cursor-grabbing" ref={containerRef} />
+  )}

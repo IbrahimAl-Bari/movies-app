@@ -10,6 +10,7 @@ import { useGSAP } from '@gsap/react';
 import {CTASection} from "@/app/components/CTASection";
 import SeriesCase from "@/app/components/SeriesCase";
 import Board from "@/app/components/Board";
+import Stack from "@/app/components/Stack";
 
 gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP)
 
@@ -22,6 +23,7 @@ export default function App() {
         <SeriesCase />
         <Board />
         <Categories />
+        <Stack />
         <CTASection />
         <Footer />
     </div>

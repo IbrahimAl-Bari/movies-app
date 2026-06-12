@@ -195,7 +195,7 @@ body {
         @apply inline-block border-4 border-black px-4 py-2
     }
     .avengers , .mando , .hail , .obsesstion , .shaw {
-        border-radius: 5px;
+        border-radius: 20px;
     }
     .video-masked {
         mask-image: url('/tv-minimal.svg');
