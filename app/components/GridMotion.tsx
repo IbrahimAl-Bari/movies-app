@@ -20,41 +20,10 @@ const GridMotion: FC<GridMotionProps> = ({ items = [], gradientColor = 'black' }
   useEffect(() => {
     gsap.ticker.lagSmoothing(0);
 
-    const handleMouseMove = (e: MouseEvent): void => {
-      mouseXRef.current = e.clientX;
-    };
-
-    const updateMotion = (): void => {
-      const maxMoveAmount = 300;
-      const baseDuration = 0.8;
-      const inertiaFactors = [0.6, 0.4, 0.3, 0.2];
-
-      rowRefs.current.forEach((row, index) => {
-        if (row) {
-          const direction = index % 2 === 0 ? 1 : -1;
-          const moveAmount = ((mouseXRef.current / window.innerWidth) * maxMoveAmount - maxMoveAmount / 2) * direction;
-
-          gsap.to(row, {
-            x: moveAmount,
-            duration: baseDuration + inertiaFactors[index % inertiaFactors.length],
-            ease: 'power3.out',
-            overwrite: 'auto'
-          });
-        }
-      });
-    };
-
-    const removeAnimationLoop = gsap.ticker.add(updateMotion);
-    window.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      removeAnimationLoop();
-    };
   }, []);
 
   return (
-      <div ref={gridRef} className="h-full w-full absolute opacity-50 z-[-1] overflow-hidden">
+      <div ref={gridRef} className="h-full w-full absolute opacity-40 z-[-1] overflow-hidden">
         <section
             className="w-full h-screen overflow-hidden relative flex items-center justify-center"
             style={{

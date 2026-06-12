@@ -1,19 +1,14 @@
-"use client";
+"use client"
 
 import CircularGallery from "./CircularGallery";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { CategoriesSkeleton } from "./Skeleton";
-import { useCategories } from "@/app/hooks/useApi";
+import {useCategories} from "@/app/hooks/useApi";
+
 
 export function Categories() {
-  const { data: galleryItems, loading, error } = useCategories();
 
-  if (loading) return <CategoriesSkeleton />;
-  if (error) return (
-      <section className="border-b-[6px] border-black bg-[#111111] px-6 py-10">
-        <p className="text-red-400 text-center">{error}</p>
-      </section>
-  );
+  const { data: galleryItems, loading, error } = useCategories();
 
   return (
       <section className="border-b-[6px] border-black bg-[#111111] px-6 py-10">
@@ -24,7 +19,6 @@ export function Categories() {
               Explore
             </span>
             </div>
-
             <h2
                 className="font-black uppercase leading-none tracking-tight text-white"
                 style={{ fontSize: "3rem", fontWeight: 900 }}

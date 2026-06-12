@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Star, CircleArrowLeft } from "lucide-react";
-import { BoardSkeleton } from "./Skeleton";
 import { useTitles } from "@/app/hooks/useApi";
+import {BoardSkeleton} from "@/app/components/Skeleton";
 
 function useIsMobile() {
-    const [isMobile, setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth < 768);
@@ -20,15 +20,10 @@ function useIsMobile() {
 }
 
 export default function Board() {
+
     const { data, loading, error } = useTitles(8.6);
     const isMobile = useIsMobile();
 
-    if (loading) return <BoardSkeleton />;
-    if (error) return (
-        <div className="w-full h-175 flex items-center justify-center bg-[#0f0f12] text-red-400">
-            {error}
-        </div>
-    );
 
     const positions = isMobile
         ? [
@@ -73,46 +68,48 @@ export default function Board() {
                 </div>
             </div>
 
-            {data.slice(0, 5).map((item, index) => {
-                const position = positions[index] ?? { x: 0, y: 0, rotate: 0 };
+            <div className="contents">
+                {data.slice(0, 5).map((item, index) => {
+                    const position = positions[index] ?? { x: 0, y: 0, rotate: 0 };
 
-                return (
-                    <motion.div
-                        key={item.id}
-                        drag
-                        dragMomentum={false}
-                        dragElastic={0}
-                        whileDrag={{ scale: 1.05, zIndex: 50 }}
-                        initial={{ x: position.x, y: position.y, rotate: position.rotate }}
-                        className="absolute z-10 cursor-grab active:cursor-grabbing rounded-2xl"
-                    >
-                        <div className="w-45 h-60 rounded-[10px] bg-[#FFD60A] overflow-hidden border-r-10 border-b-10 border-black shadow-[10px_10px_0px_0px_#FF4D4D]">
-                            <img
-                                src={item.primaryImage}
-                                alt={item.originalTitle || "Unknown Title"}
-                                className="w-40 mx-auto mt-1 h-40 object-cover rounded-[10px]"
-                                draggable={false}
-                            />
+                    return (
+                        <motion.div
+                            key={item.id}
+                            drag
+                            dragMomentum={false}
+                            dragElastic={0}
+                            whileDrag={{ scale: 1.05, zIndex: 50 }}
+                            initial={{ x: position.x, y: position.y, rotate: position.rotate }}
+                            className="absolute z-10 cursor-grab active:cursor-grabbing rounded-2xl"
+                        >
+                            <div className="w-45 h-60 rounded-[10px] bg-[#FFD60A] overflow-hidden border-r-10 border-b-10 border-black shadow-[10px_10px_0px_0px_#FF4D4D]">
+                                <img
+                                    src={item.primaryImage}
+                                    alt={item.originalTitle || "Unknown Title"}
+                                    className="w-40 mx-auto mt-1 h-40 object-cover rounded-[10px]"
+                                    draggable={false}
+                                />
 
-                            <h3 className="text-center font-black uppercase tracking-tight w-full mt-1 text-black text-sm px-2 truncate">
-                                {item.originalTitle || "Unknown Title"}
-                            </h3>
+                                <h3 className="text-center font-black uppercase tracking-tight w-full mt-1 text-black text-sm px-2 truncate">
+                                    {item.originalTitle || "Unknown Title"}
+                                </h3>
 
-                            <div className="w-full font-black uppercase tracking-tight mt-1 flex justify-around text-black text-xs">
-                                <div className="flex gap-2">
-                                    <Star className="text-black w-4 h-4" />
-                                    <span>{item.rating}</span>
-                                </div>
+                                <div className="w-full font-black uppercase tracking-tight mt-1 flex justify-around text-black text-xs">
+                                    <div className="flex gap-2">
+                                        <Star className="text-black w-4 h-4" />
+                                        <span>{item.rating}</span>
+                                    </div>
 
-                                <div className="flex gap-2">
-                                    <Calendar className="text-black w-4 h-4" />
-                                    <span>{item.startYear || "N/A"}</span>
+                                    <div className="flex gap-2">
+                                        <Calendar className="text-black w-4 h-4" />
+                                        <span>{item.startYear || "N/A"}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </motion.div>
-                );
-            })}
+                        </motion.div>
+                    );
+                })}
+            </div>
         </div>
     );
 }
