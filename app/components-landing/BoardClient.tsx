@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Star, CircleArrowLeft } from "lucide-react";
-import { useTitles } from "@/app/hooks/useApi";
-import {BoardSkeleton} from "@/app/components/Skeleton";
 
-function useIsMobile() {
-    const [isMobile, setIsMobile] = useState<boolean | null>(null);
+export function BoardClient({ data }: { data: any[] }) {
+    const [isMobile, setIsMobile] = useState<boolean>(false);
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth < 768);
@@ -15,15 +13,6 @@ function useIsMobile() {
         window.addEventListener("resize", check);
         return () => window.removeEventListener("resize", check);
     }, []);
-
-    return isMobile;
-}
-
-export default function Board() {
-
-    const { data, loading, error } = useTitles(8.6);
-    const isMobile = useIsMobile();
-
 
     const positions = isMobile
         ? [
@@ -47,10 +36,10 @@ export default function Board() {
                 className="absolute inset-0 bg-[#111111]"
                 style={{
                     backgroundImage: `
-            radial-gradient(circle at center, rgba(255,255,255,0.05), transparent 70%),
-            linear-gradient(rgba(255,214,10,0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,214,10,0.1) 1px, transparent 1px)
-          `,
+radial-gradient(circle at center, rgba(255,255,255,0.05), transparent 70%),
+linear-gradient(rgba(255,214,10,0.1) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,214,10,0.1) 1px, transparent 1px)
+`,
                     backgroundSize: "auto, 40px 40px, 40px 40px",
                 }}
             />
@@ -58,10 +47,9 @@ export default function Board() {
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle,rgba(255,255,255,0.08),transparent_60%)]" />
 
             <div className="absolute inset-0 z-50 pointer-events-none">
-                <div className="mt-30 text-center">
-                    <h2 className="text-5xl font-black">All The Popular Series</h2>
-
-                    <div className="flex items-center justify-center gap-2 mt-5 opacity-50">
+                <div className="mt-30 text-center text-white uppercase">
+                    <h2 className="text-5xl max-sm:text-4xl font-black">All The Popular Series</h2>
+                    <div className="flex items-center justify-center gap-2 mt-5 opacity-50 max-md:text-[#FFD60A] max-md:opacity-100">
                         <CircleArrowLeft className="w-4 h-4" />
                         <span>Drag To Move</span>
                     </div>
@@ -69,9 +57,9 @@ export default function Board() {
             </div>
 
             <div className="contents">
+
                 {data.slice(0, 5).map((item, index) => {
                     const position = positions[index] ?? { x: 0, y: 0, rotate: 0 };
-
                     return (
                         <motion.div
                             key={item.id}
@@ -80,28 +68,28 @@ export default function Board() {
                             dragElastic={0}
                             whileDrag={{ scale: 1.05, zIndex: 50 }}
                             initial={{ x: position.x, y: position.y, rotate: position.rotate }}
-                            className="absolute z-10 cursor-grab active:cursor-grabbing rounded-2xl"
-                        >
-                            <div className="w-45 h-60 rounded-[10px] bg-[#FFD60A] overflow-hidden border-r-10 border-b-10 border-black shadow-[10px_10px_0px_0px_#FF4D4D]">
+                            className="absolute z-10 cursor-grab active:cursor-grabbing rounded-2xl">
+
+                            <div className=" board-card rounded-[10px] bg-[#FFD60A] overflow-hidden border-r-10 border-b-10 border-black shadow-[10px_10px_0px_0px_#FF4D4D]">
                                 <img
                                     src={item.primaryImage}
                                     alt={item.originalTitle || "Unknown Title"}
-                                    className="w-40 mx-auto mt-1 h-40 object-cover rounded-[10px]"
+                                    className="w-40 mt-1 h-40 max-sm:h-25 max-md:w-30 max-md:h-40 object-cover rounded-[10px]"
                                     draggable={false}
                                 />
 
-                                <h3 className="text-center font-black uppercase tracking-tight w-full mt-1 text-black text-sm px-2 truncate">
+                                <h3 className="text-center max-sm:text-xs font-black uppercase tracking-tight w-full mt-1 text-black text-sm px-2 truncate">
                                     {item.originalTitle || "Unknown Title"}
                                 </h3>
 
-                                <div className="w-full font-black uppercase tracking-tight mt-1 flex justify-around text-black text-xs">
+                                <div className="w-full font-black uppercase tracking-tight mb-1 mt-1 flex justify-around text-black text-xs">
                                     <div className="flex gap-2">
-                                        <Star className="text-black w-4 h-4" />
+                                        <Star className="text-black w-4 h-4 max-sm:w-3" />
                                         <span>{item.rating}</span>
                                     </div>
 
                                     <div className="flex gap-2">
-                                        <Calendar className="text-black w-4 h-4" />
+                                        <Calendar className="text-black w-4 h-4 max-sm:w-3" />
                                         <span>{item.startYear || "N/A"}</span>
                                     </div>
                                 </div>
