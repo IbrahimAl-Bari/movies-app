@@ -48,7 +48,7 @@ export function Footer() {
 
         <div className="text-center">
           <p className="font-bold text-white" style={{ fontWeight: 700 }}>
-            © 2026 CINEMATIX. All rights reserved. Made with for movie lovers.
+            © 2026 CINEMATIX. All rights reserved. Made for movie lovers.
           </p>
         </div>
 

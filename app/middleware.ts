@@ -27,8 +27,8 @@ export async function middleware(request: NextRequest) {
     // getUser() validates the token against the Supabase server.
     const { data: { user } } = await supabase.auth.getUser()
 
-    // Example Route Protection: Protect the /dashboard route
-    if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
+    // Example Route Protection: Protect the /collection route
+    if (!user && request.nextUrl.pathname.startsWith('/collection')) {
         const url = request.nextUrl.clone()
         url.pathname = '/login'
         return NextResponse.redirect(url)

@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import {Suspense} from "react";
 import Loading from "@/app/loading";
+import {Navigation} from "@/app/components/Navigation";
+import {Footer} from "@/app/components/Footer";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -32,7 +34,9 @@ export default function RootLayout({
 
         <Suspense fallback={<Loading />}>
         <main className="relative overflow-hidden">
+            <Navigation />
             {children}
+            <Footer />
         </main>
         </Suspense>
 

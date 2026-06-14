@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useFormStatus } from 'react-dom'
-import {Navigation} from "@/app/components-landing/Navigation";
 import { login } from '@/app/login/actions'
 import { signup } from '@/app/signup/actions'
 
@@ -25,7 +24,6 @@ export default function AuthForm() {
 
     return (
         <section className={"relative overflow-hidden border-b-[6px] h-screen w-screen z-0 border-black bg-[#111111]"}>
-            <Navigation />
             <div className="w-full max-w-md mt-5 p-4 m-auto bg-[#FF4D4D] rounded-2xl border-4 border-black shadow-[6px_6px_0px_0px_#FFD60A]">
                 <div className="text-center mb-8">
                     <h3 className="font-bold text-4xl text-black mb-2">

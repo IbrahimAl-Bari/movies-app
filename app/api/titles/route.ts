@@ -1,7 +1,7 @@
 export async function GET() {
     try {
         const res = await fetch("https://api.imdbapi.dev/titles", {
-            next: { revalidate: 60 }
+            next: { revalidate: 3600 }
         });
 
         if (!res.ok) {

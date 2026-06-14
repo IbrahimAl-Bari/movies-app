@@ -39,10 +39,10 @@ export function HeroClient({ initialData }: { initialData: any[] }) {
                 </p>
 
                 <div className="mt-10 flex justify-center flex-wrap gap-4">
-                    <button onClick={() => router.push("/dashboard")} className="btn-watch flex items-center gap-2 border-4 border-black bg-[#FFD60A] px-8 py-4 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FF4D4D] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#FF4D4D]">
+                    <button onClick={() => router.push("/collection")} className="btn-watch flex items-center gap-2 border-4 border-black bg-[#FFD60A] px-8 py-4 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FF4D4D] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#FF4D4D]">
                         <TvMinimalPlay className="h-6 w-6 fill-black" /> Watch Now
                     </button>
-                    <button onClick={() => router.push("/dashboard")} className="btn-browse flex items-center gap-2 border-4 border-black bg-white px-8 py-4 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FFD60A] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#FFD60A]">
+                    <button onClick={() => router.push("/collection")} className="btn-browse flex items-center gap-2 border-4 border-black bg-white px-8 py-4 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FFD60A] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#FFD60A]">
                         <List className="h-6 w-6" /> Browse Collection
                     </button>
                 </div>

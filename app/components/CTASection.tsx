@@ -6,7 +6,7 @@ import {redirect} from "next/navigation";
 export function CTASection() {
 
   const handleclick = () => {
-    redirect("/dashboard")
+    redirect("/collection")
   }
 
   const handleclick2 = () => {

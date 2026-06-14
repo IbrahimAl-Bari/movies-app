@@ -78,9 +78,9 @@ linear-gradient(90deg, rgba(255,214,10,0.1) 1px, transparent 1px)
                                     draggable={false}
                                 />
 
-                                <h3 className="text-center max-sm:text-xs font-black uppercase tracking-tight w-full mt-1 text-black text-sm px-2 truncate">
+                                <h5 className="text-center max-sm:text-xs font-black uppercase tracking-tight w-full mt-1 text-black text-sm px-2 truncate">
                                     {item.originalTitle || "Unknown Title"}
-                                </h3>
+                                </h5>
 
                                 <div className="w-full font-black uppercase tracking-tight mb-1 mt-1 flex justify-around text-black text-xs">
                                     <div className="flex gap-2">
