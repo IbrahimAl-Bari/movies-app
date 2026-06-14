@@ -49,7 +49,7 @@ export default function AuthForm() {
                                 name="username"
                                 type="text"
                                 required={isSignUp}
-                                className="w-full px-4 py-3 bg-[#111111] text-black border border-[#FFD60A] rounded-lg focus:outline-none focus:border-white transition-colors"
+                                className="w-full px-4 py-3 bg-[#111111] text-white border border-[#FFD60A] rounded-lg focus:outline-none focus:border-white transition-colors"
                                 placeholder="username"
                             />
                         </div>

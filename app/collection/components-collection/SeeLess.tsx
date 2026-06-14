@@ -2,13 +2,17 @@
 
 import React from 'react'
 import {CircleArrowLeft} from "lucide-react";
-import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
 
-// @ts-ignore
-const SeeLess = ({ url }) => {
+interface SeeLessProps {
+    url: string;
+}
+
+const SeeLess = ({ url }: SeeLessProps) => {
+    const router = useRouter();
 
     const handleclick = () => {
-        redirect(url)
+        router.push(url);
     }
 
     return (

@@ -12,11 +12,6 @@ const Page = async () => {
         redirect('/login')
     }
 
-    // RLS ensures this only returns movies belonging to the logged-in user
-    const { data: movies, error } = await supabase
-        .from('user_movies')
-        .select('*')
-
     return (
         <div>profile</div>
     )

@@ -32,13 +32,13 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
         <body className="min-h-full flex flex-col">
 
-        <Suspense fallback={<Loading />}>
         <main className="relative overflow-hidden">
             <Navigation />
-            {children}
-            <Footer />
+            <Suspense fallback={<Loading />}>
+                {children}
+                <Footer />
+            </Suspense>
         </main>
-        </Suspense>
 
 
         </body>

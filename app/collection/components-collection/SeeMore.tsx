@@ -2,13 +2,17 @@
 
 import React from 'react'
 import {CircleArrowRight} from "lucide-react";
-import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
 
-// @ts-ignore
-const SeeMore = ({ url }) => {
+interface SeeMoreProps {
+    url: string;
+}
+
+const SeeMore = ({ url }: SeeMoreProps) => {
+    const router = useRouter();
 
     const handleclick = () => {
-        redirect(url)
+        router.push(url);
     }
 
     return (
