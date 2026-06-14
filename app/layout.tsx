@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import {Suspense} from "react";
 import Loading from "@/app/loading";
+import {Navigation} from "@/app/components/Navigation";
+import {Footer} from "@/app/components/Footer";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -30,11 +32,13 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
         <body className="min-h-full flex flex-col">
 
-        <Suspense fallback={<Loading />}>
         <main className="relative overflow-hidden">
-            {children}
+            <Navigation />
+            <Suspense fallback={<Loading />}>
+                {children}
+                <Footer />
+            </Suspense>
         </main>
-        </Suspense>
 
 
         </body>

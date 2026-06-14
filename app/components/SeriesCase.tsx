@@ -11,6 +11,18 @@ gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP)
 const SeriesCase = () => {
     const container = useRef<HTMLDivElement>(null);
     const [mounted, setMounted] = useState(false)
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia("(max-width: 768px)");
+
+        const handleChange = (e: { matches: boolean | ((prevState: boolean) => boolean); }) => setIsMobile(e.matches);
+
+        setIsMobile(mediaQuery.matches);
+        mediaQuery.addEventListener("change", handleChange);
+
+        return () => mediaQuery.removeEventListener("change", handleChange);
+    }, []);
 
     useEffect(() => { setMounted(true) }, [])
 
@@ -27,20 +39,18 @@ const SeriesCase = () => {
             }
         })
         tl
-            .fromTo(".video-masked", { maskSize: "150%", WebkitMaskSize: "150%" }, { maskSize: "30%", WebkitMaskSize: "30%" })
+            .fromTo(".video-masked", { maskSize: "150%", WebkitMaskSize: "150%" }, { maskSize: isMobile ? "60%" : "30%", WebkitMaskSize: isMobile ? "60%" : "30%"})
             .from(split.words, { y: 30, opacity: 0, stagger: 0.1, duration: 1, ease: "power3.out" })
         return () => split.revert()
-    }, { scope: container, dependencies: [mounted] })
+    }, { scope: container, dependencies: [mounted, isMobile] })
 
     if (!mounted) return <section className="relative overflow-hidden border-b-[6px] h-screen w-screen border-black bg-[#111111] px-6 py-20" />
 
     return (
-        <section ref={container} className="relative overflow-hidden border-b-[6px] h-screen w-screen border-black bg-[#111111] px-6 py-20">
+        <section ref={container} className="relative overflow-hidden border-b-[6px] h-screen w-screen border-black bg-[#111111] py-20">
             <div className="h-full w-full flex justify-center items-center">
                 <h2
-                    className="series-fade-in absolute top-20 text-white"
-                    style={{ fontSize: '3rem', fontWeight: 900, lineHeight: 0 }}
-                >
+                    className="series-fade-in absolute top-13 text-white">
                     Including Your Favourite Movies
                 </h2>
                 <video className="video-masked" src="/videos/video.mp4" preload="auto" autoPlay muted loop playsInline />

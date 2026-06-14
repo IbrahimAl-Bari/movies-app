@@ -59,9 +59,7 @@ const ShowCase = () => {
         >
             <div className="w-full h-full flex justify-center items-center">
                 <h1
-                    className="fade-in mb-3 text-center font-black uppercase text-white relative z-20"
-                    style={{ fontSize: '6rem', fontWeight: 900, lineHeight: 1.2 }}
-                >
+                    className="showcase-h1 fade-in mb-3 text-center uppercase text-white relative z-20">
                     Browse & <br /> Review and <br /> Watch
                 </h1>
 

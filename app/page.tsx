@@ -1,7 +1,5 @@
-import { Navigation } from "./components/Navigation";
-import { Hero } from "./components/Hero";
-import { Categories } from "./components/Categories";
-import { Footer } from "./components/Footer";
+import Hero from "@/app/components/Hero";
+import Categories from "@/app/components/Categories";
 import ShowCase from "@/app/components/ShowCase";
 import gsap from "gsap"
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -14,10 +12,10 @@ import Stack from "@/app/components/Stack";
 
 gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP)
 
-export default function App() {
+export default async function App() {
+
   return (
     <div className="min-h-screen bg-[#111111]">
-        <Navigation />
         <Hero />
         <ShowCase />
         <SeriesCase />
@@ -25,7 +23,6 @@ export default function App() {
         <Categories />
         <Stack />
         <CTASection />
-        <Footer />
     </div>
   );
 }

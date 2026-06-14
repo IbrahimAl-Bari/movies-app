@@ -1,7 +1,4 @@
-'use client'
-
-import { useEffect, useRef, FC, ReactNode } from 'react';
-import { gsap } from 'gsap';
+import {useRef, FC, ReactNode } from 'react';
 
 interface GridMotionProps {
   items?: (string | ReactNode)[];
@@ -9,21 +6,15 @@ interface GridMotionProps {
 }
 
 const GridMotion: FC<GridMotionProps> = ({ items = [], gradientColor = 'black' }) => {
-  const gridRef = useRef<HTMLDivElement>(null);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const mouseXRef = useRef<number>(0);
 
   const totalItems = 28;
   const defaultItems = Array.from({ length: totalItems }, (_, index) => `Item ${index + 1}`);
   const combinedItems = items.length > 0 ? items.slice(0, totalItems) : defaultItems;
 
-  useEffect(() => {
-    gsap.ticker.lagSmoothing(0);
-
-  }, []);
 
   return (
-      <div ref={gridRef} className="h-full w-full absolute opacity-40 z-[-1] overflow-hidden">
+      <div className="h-full w-full absolute opacity-40 z-[-1] overflow-hidden">
         <section
             className="w-full h-screen overflow-hidden relative flex items-center justify-center"
             style={{
