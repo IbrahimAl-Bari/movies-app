@@ -1,18 +1,13 @@
 import React from "react";
 import SeeMore from "@/app/collection/components-collection/SeeMore";
-import MovieCard from "@/app/components/MovieCard";
+import MovieCard from "@/app/collection/components-collection/MovieCard";
 
 const PopularShell = async () => {
     async function getImdbMoviesByGenre() {
         try {
-            const res = await fetch(
-                "https://api.imdbapi.dev/titles?startYear=1900&endYear=2026&minVoteCount=100000&minAggregateRating=8&maxAggregateRating=10&sortBy=SORT_BY_POPULARITY&sortOrder=ASC",
-                {
-                    next: {
-                        revalidate: 7200,
-                    },
-                }
-            );
+            const res = await fetch(`https://api.imdbapi.dev/titles?startYear=1900&endYear=2026&minVoteCount=700000&maxVoteCount=1000000&minAggregateRating=8&maxAggregateRating=10&sortBy=SORT_BY_POPULARITY&sortOrder=ASC`, {
+                next: { revalidate: 3600 }
+            });
 
             if (!res.ok) return [];
 

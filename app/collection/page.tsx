@@ -7,6 +7,7 @@ export default async function DashboardPage() {
     const supabase = await createClient()
     const { data: { user }, error } = await supabase.auth.getUser()
 
+    console.log(error)
     if (error) {
         redirect("/error")
     }

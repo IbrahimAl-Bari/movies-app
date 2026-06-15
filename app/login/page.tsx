@@ -24,6 +24,7 @@ export default function AuthForm() {
 
     return (
         <section className={"relative overflow-hidden border-b-[6px] h-screen w-screen z-0 border-black bg-[#111111]"}>
+
             <div className="w-full max-w-md mt-5 p-4 m-auto bg-[#FF4D4D] rounded-2xl border-4 border-black shadow-[6px_6px_0px_0px_#FFD60A]">
                 <div className="text-center mb-8">
                     <h3 className="font-bold text-4xl text-black mb-2">

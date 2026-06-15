@@ -1,6 +1,6 @@
 import React from 'react'
 import SeeLess from "@/app/collection/components-collection/SeeLess";
-import MovieCard from "@/app/components/MovieCard";
+import MovieCard from "@/app/collection/components-collection/MovieCard";
 
 const Page = async () => {
 

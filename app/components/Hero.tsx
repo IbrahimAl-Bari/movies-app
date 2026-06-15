@@ -18,7 +18,7 @@ async function getMovies() {
             originalTitle: t.originalTitle ?? "Untitled",
             startYear: String(t.startYear ?? ""),
         }))
-        .filter((t: any) => t.rating >= 6.8 && t.genres?.some((g: string) => allowedGenres.includes(g)));
+        .filter((t: any) => t.rating >= 6.5 && t.genres?.some((g: string) => allowedGenres.includes(g)));
 }
 
 export default async function Hero() {

@@ -29,8 +29,6 @@ async function getBoardData(): Promise<TitleItem[]> {
 
         const json: ApiResponse = await res.json();
 
-        console.log(json)
-
         return (json?.titles ?? [])
             .map(mapApiTitleToItem)
             .filter((t) => t.rating >= 8.6);

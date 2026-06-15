@@ -41,7 +41,7 @@ const SeriesCase = () => {
         tl
             .fromTo(".video-masked", { maskSize: "150%", WebkitMaskSize: "150%" }, { maskSize: isMobile ? "60%" : "30%", WebkitMaskSize: isMobile ? "60%" : "30%"})
             .from(split.words, { y: 30, opacity: 0, stagger: 0.1, duration: 1, ease: "power3.out" })
-        return () => split.revert()
+
     }, { scope: container, dependencies: [mounted, isMobile] })
 
     if (!mounted) return <section className="relative overflow-hidden border-b-[6px] h-screen w-screen border-black bg-[#111111] px-6 py-20" />
