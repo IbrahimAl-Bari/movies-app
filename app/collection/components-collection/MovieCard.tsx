@@ -14,6 +14,8 @@ const MovieCard = ({ movie }) => {
         state.isSaved(movie.id)
     )
 
+
+    // @ts-ignore
     const handleBookmark = (e) => {
         e.stopPropagation()
         toggleMovie(movie)
@@ -25,7 +27,12 @@ const MovieCard = ({ movie }) => {
 
     const title = movie.primaryTitle || movie.title || "Untitled Masterpiece"
     const imgUrl = movie.poster || movie.posterUrl || null
-    const rating = movie.averageRating ?? movie.imdbRating ?? "N/A"
+    const rating =
+        movie.averageRating != null
+            ? Number(movie.averageRating).toFixed(1)
+            : movie.imdbRating != null
+                ? Number(movie.imdbRating).toFixed(1)
+                : "N/A";
 
     const runtime = movie.runtimeMinutes ?? 0
     const hours = Math.floor(runtime / 60)

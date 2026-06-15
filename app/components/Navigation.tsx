@@ -1,8 +1,10 @@
 import { Film ,  CircleUserRound } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/app/utils/supabase/server";
+import SearchBar from "@/app/components/SearchBar";
 
 export async function Navigation() {
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -12,21 +14,24 @@ export async function Navigation() {
       <nav className="border-b-[6px] border-black bg-[#111111] px-6 py-2">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
 
-          <div className="flex items-center gap-2 text-white">
-            <div className="flex items-center gap-2 border-4 border-black px-4 py-2 shadow-[4px_4px_0px_0px_#000000]">
+          <div className="flex items-center gap-5 text-white">
+
+            <div className="flex items-center rounded-2xl gap-2 border-4 border-black px-4 py-2 shadow-[4px_4px_0px_0px_#000000]">
               <Film className="h-6 w-6" />
 
-              <span className="font-black max-sm:hidden uppercase tracking-tight" style={{ fontWeight: 900 }}>
+              <span className="font-black max-lg:hidden uppercase tracking-tight" style={{ fontWeight: 900 }}>
               CINEMATIX
             </span>
             </div>
+
+            <SearchBar />
           </div>
 
           <div className="hidden items-center gap-8 md:flex">
             <Link href="/" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
               Home
             </Link>
-            <Link href="#" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
+            <Link href="/watch" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
               Watch
             </Link>
             <Link href="/collection" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
@@ -42,7 +47,7 @@ export async function Navigation() {
 
           {user ? (
               <div className="flex items-center gap-4">
-            <span className="font-black text-white tracking-tight flex gap-3 mr-3">
+            <span className="font-black text-white tracking-tight max-sm:hidden max-md:flex max-lg:hidden flex gap-3 mr-3 ">
               <CircleUserRound />
               {username || 'User'}
             </span>

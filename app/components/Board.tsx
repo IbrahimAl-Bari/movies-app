@@ -23,7 +23,9 @@ function mapApiTitleToItem(t: ApiTitle): TitleItem {
 
 async function getBoardData(): Promise<TitleItem[]> {
     try {
-        const res = await fetch(`https://api.imdbapi.dev/titles`);
+        const res = await fetch(`https://api.imdbapi.dev/titles` ,
+            { next: { revalidate: 86400 } }
+            );
 
         if (!res.ok) return [];
 

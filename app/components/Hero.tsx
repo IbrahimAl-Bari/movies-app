@@ -25,6 +25,5 @@ async function getHeroMovies() {
 
 export default async function Hero() {
     const images = await getHeroMovies();
-    console.log(images)
     return <HeroClient initialData={images} />;
 }
