@@ -15,7 +15,8 @@ export async function Navigation() {
           <div className="flex items-center gap-2 text-white">
             <div className="flex items-center gap-2 border-4 border-black px-4 py-2 shadow-[4px_4px_0px_0px_#000000]">
               <Film className="h-6 w-6" />
-              <span className="font-black uppercase tracking-tight" style={{ fontWeight: 900 }}>
+
+              <span className="font-black max-sm:hidden uppercase tracking-tight" style={{ fontWeight: 900 }}>
               CINEMATIX
             </span>
             </div>
@@ -31,11 +32,11 @@ export async function Navigation() {
             <Link href="/collection" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
               Collection
             </Link>
-            <Link href="#" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
-              Trending
+            <Link href="/watchlist" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
+              Watchlist
             </Link>
             <Link href="/profile" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
-              Profile
+              profile
             </Link>
           </div>
 
@@ -46,7 +47,7 @@ export async function Navigation() {
               {username || 'User'}
             </span>
                 <form action="/auth/signout" method="post">
-                  <button className="inline-block border-4 border-black bg-[#FF4D4D] px-6 py-2 font-black uppercase tracking-tight text-black shadow-[6px_6px_0px_0px_#FFD60A] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#FFD60A]">
+                  <button className="inline-block max-sm:px-3 max-sm:py-1 border-4 border-black bg-[#FF4D4D] px-6 py-2 font-black uppercase tracking-tight text-black shadow-[6px_6px_0px_0px_#FFD60A] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#FFD60A]">
                     Quit
                   </button>
                 </form>

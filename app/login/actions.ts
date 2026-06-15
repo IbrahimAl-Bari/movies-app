@@ -12,14 +12,10 @@ export async function login(formData: FormData) {
         password: formData.get('password') as string,
     }
 
-    if (!data.email || !data.password) {
-        redirect('/error')
-    }
-
     const { error } = await supabase.auth.signInWithPassword(data)
 
     if (error) {
-        redirect('/error')
+        return redirect('/login?message=Could not authenticate user. Please check your credentials.')
     }
 
     revalidatePath('/', 'layout')

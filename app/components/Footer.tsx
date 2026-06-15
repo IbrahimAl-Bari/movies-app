@@ -1,6 +1,31 @@
+"use client"
+
 import { Film, Mail } from "lucide-react";
+import { supabase } from "@/app/lib/supabase";
+import {useState} from "react";
 
 export function Footer() {
+
+  const [email, setEmail] = useState("");
+
+
+  const handleSubmit = async () => {
+    if (!email) return;
+
+    const { error } = await supabase
+        .from("subscribers")
+        .insert([{ email }]);
+
+    if (error) {
+      console.error(error);
+      alert("Failed to save email");
+      return;
+    }
+
+    alert("Thanks!");
+    setEmail("");
+  };
+
   return (
     <footer className="bg-black p-6">
       <div className="mx-auto max-w-7xl">
@@ -32,10 +57,14 @@ export function Footer() {
               <input
                 type="email"
                 placeholder="Your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="flex-1 border-4 border-white bg-transparent px-4 py-2 font-bold text-white placeholder-gray-400 outline-none focus:border-[#FFD60A]"
                 style={{ fontWeight: 700 }}
               />
-              <button className="border-4 border-white bg-[#FF4D4D] p-2 transition-all hover:bg-[#FFD60A]">
+              <button
+                  onClick={handleSubmit}
+                  className="border-4 border-white bg-[#FF4D4D] p-2 transition-all hover:bg-[#FFD60A]">
                 <Mail className="h-6 w-6" />
               </button>
             </div>
