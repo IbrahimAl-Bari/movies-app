@@ -3,7 +3,9 @@ import type { ApiResponse, ApiTitle, GalleryItem } from "@/app/lib/types";
 
 async function getCategoryData(): Promise<GalleryItem[]> {
 
-  const res = await fetch(`https://api.imdbapi.dev/titles`);
+  const res = await fetch(`https://api.imdbapi.dev/titles?minAggregateRating=8&sortBy=SORT_BY_USER_RATING&sortOrder=ASC`,
+      { next: { revalidate: 86400 } }
+  );
   if (!res.ok) return [];
 
   const json: ApiResponse = await res.json();

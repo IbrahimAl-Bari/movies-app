@@ -1,27 +1,29 @@
 import { HeroClient } from "./HeroClient";
+import { getMovies } from "@/app/lib/movies";
 
-async function getMovies() {
-    const res = await fetch("https://api.imdbapi.dev/titles");
-    if (!res.ok) return [];
+async function getHeroMovies() {
 
-    const json = await res.json();
-    const apiTitles = json?.titles ?? [];
+    // @ts-ignore
+    const data = (await getMovies(undefined, 200))
+        .filter((m) => m.year >= 2010);
+
     const allowedGenres = ["Action", "Thriller", "Crime", "War", "Comedy"];
 
-    return apiTitles
-        .map((t: any) => ({
-            id: t.id ?? Math.random().toString(36).slice(2),
-            type: t.type ?? "movie",
-            genres: t.genres ?? [],
-            primaryImage: t.primaryImage?.url ?? "",
-            rating: (typeof t.rating === "number" ? t.rating : t.rating?.aggregateRating) ?? 0,
-            originalTitle: t.originalTitle ?? "Untitled",
-            startYear: String(t.startYear ?? ""),
-        }))
-        .filter((t: any) => t.rating >= 6.8 && t.genres?.some((g: string) => allowedGenres.includes(g)));
+    return data
+        .filter((t: any) => {
+            const genres =
+                typeof t.genres === "string"
+                    ? t.genres.split(",")
+                    : t.genres;
+
+            return genres?.some((g: string) =>
+                allowedGenres.includes(g.trim())
+            );
+        })
+        .map((m: any) => m.poster)
 }
 
 export default async function Hero() {
-    const data = await getMovies();
-    return <HeroClient initialData={data} />;
+    const images = await getHeroMovies();
+    return <HeroClient initialData={images} />;
 }

@@ -2,20 +2,21 @@ import { createClient } from '@/app/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import React from "react";
 import PopularShell from "@/app/collection/components-collection/(shells)/PopularShell";
+import FamilyShell from "@/app/collection/components-collection/(shells)/FamilyShell";
+import InterestingShell from "@/app/collection/components-collection/(shells)/InterestingShell";
+import ActionShell from "@/app/collection/components-collection/(shells)/ActionShell";
+import AnimationShell from "@/app/collection/components-collection/(shells)/AnimationShell";
+
 
 export default async function DashboardPage() {
     const supabase = await createClient()
-    const { data: { user }, error } = await supabase.auth.getUser()
+    const { data: { user } } = await supabase.auth.getUser()
 
-    if (error) {
-        redirect("/error")
-    }
     if (!user) {
         redirect('/login')
     }
 
     const username = user.user_metadata?.username || 'MovieFan'
-
 
     return (
         <section className="min-h-screen bg-[#111111] pb-24 px-4 md:px-8 selection:bg-[#FFD60A] selection:text-black">
@@ -31,6 +32,10 @@ export default async function DashboardPage() {
             </div>
 
             <PopularShell />
+            <InterestingShell />
+            <ActionShell />
+            <FamilyShell />
+            <AnimationShell />
         </section>
     )
 }

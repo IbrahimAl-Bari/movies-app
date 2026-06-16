@@ -1,26 +1,13 @@
 import React from 'react'
 import SeeLess from "@/app/collection/components-collection/SeeLess";
-import MovieCard from "@/app/components/MovieCard";
+import MovieCard from "@/app/collection/components-collection/MovieCard";
+import {getMovies} from "@/app/lib/movies";
 
 const Page = async () => {
 
-    async function getPopularMovies() {
-        try {
-            const res = await fetch(`https://api.imdbapi.dev/titles?startYear=1900&endYear=2026&minVoteCount=700000&maxVoteCount=1000000&minAggregateRating=8&maxAggregateRating=10&sortBy=SORT_BY_POPULARITY&sortOrder=ASC`, {
-                next: { revalidate: 3600 }
-            });
+    // @ts-ignore
+    const popularMovies = await getMovies(undefined , 30)
 
-            if (!res.ok) return [];
-            const data = await res.json();
-
-            return data.titles || data.results || [];
-        } catch (error) {
-            console.error('Failed fetching popular movies:', error);
-            return [];
-        }
-    }
-
-    const ActionMovies = await getPopularMovies();
 
     return (
         <section className="min-h-screen bg-[#111111] pb-24 px-4 md:px-8 selection:bg-[#FFD60A] selection:text-black">
@@ -35,7 +22,7 @@ const Page = async () => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pb-6">
-                        {ActionMovies.length > 0 ? ActionMovies.slice(0, 20).map((movie: any) => (
+                        {popularMovies.length > 0 ? popularMovies.slice(0, 20).map((movie: any) => (
                             <MovieCard key={movie.id || movie.imdbId} movie={movie} />
                         )) : (
                             <div className="col-span-full">

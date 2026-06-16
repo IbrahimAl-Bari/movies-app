@@ -42,7 +42,7 @@ p { font-size: 0.7rem; font-weight: 700; }
 }
 
 @media (min-width: 768px) {
-    h1 { font-size: 4rem; }
+    h1 { font-size: 5rem; }
     h2 { font-size: 3rem; }
     h3 { font-size: 2rem; }
     h4 { font-size: 1rem; }

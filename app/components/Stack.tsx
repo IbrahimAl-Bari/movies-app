@@ -81,12 +81,12 @@ function StackCard({ card, index, total }: StackCardProps) {
                         Category
                     </span>
 
-                    <h2
+                    <h1
                         className="mt-4 text-5xl md:text-7xl font-black"
                         style={{ color: card.textColor }}
                     >
                         {card.title}
-                    </h2>
+                    </h1>
 
                     <p
                         className="mt-6 max-w-xl text-lg leading-relaxed opacity-80"

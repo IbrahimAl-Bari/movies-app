@@ -15,7 +15,7 @@ gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP);
 export function HeroClient({ initialData }: { initialData: any[] }) {
     const container = useRef<HTMLElement>(null);
     const router = useRouter();
-    const imageUrls = initialData.map((m) => m.primaryImage).filter(Boolean);
+    const imageUrls = initialData.filter(Boolean);
 
     useGSAP(() => {
         const split = SplitText.create(".fade-in", { type: "chars, words, lines" });
