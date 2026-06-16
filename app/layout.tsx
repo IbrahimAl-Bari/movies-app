@@ -6,6 +6,7 @@ import {Suspense} from "react";
 import Loading from "@/app/loading";
 import {Navigation} from "@/app/components/Navigation";
 import {Footer} from "@/app/components/Footer";
+import NotFound from "@/app/not-found";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",

@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Calendar, Clock4, Star, Bookmark } from "lucide-react"
+import { Calendar, Clock4, Star, Bookmark , VoteIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useWatchlistStore } from "@/app/lib/watchlistStore"
 
@@ -22,21 +22,19 @@ const MovieCard = ({ movie }) => {
     }
 
     const handleClick = () => {
-        router.push(`/${movie.id}`)
+        router.push(`/titles/${movie.id}`)
     }
 
     const title = movie.primaryTitle || movie.title || "Untitled Masterpiece"
     const imgUrl = movie.poster || movie.posterUrl || null
-    const rating =
-        movie.averageRating != null
-            ? Number(movie.averageRating).toFixed(1)
-            : movie.imdbRating != null
-                ? Number(movie.imdbRating).toFixed(1)
-                : "N/A";
+    const vote = movie.vote_average ? movie.vote_average : null
+    const rating = movie.averageRating ? movie.averageRating : null
 
     const runtime = movie.runtimeMinutes ?? 0
     const hours = Math.floor(runtime / 60)
     const minutes = runtime % 60
+
+    const rate = movie.vote_count
 
     const formattedRuntime =
         runtime > 0
@@ -87,7 +85,7 @@ const MovieCard = ({ movie }) => {
                 {/* Rating */}
                 <div className="absolute top-2 right-2 border-2 flex items-center gap-1 border-black bg-[#FFD60A] px-1.5 py-0.5 text-xs font-black text-black shadow-[3px_3px_0px_0px_#000000]">
                     <Star className="w-3 h-3 fill-black" />
-                    {rating}
+                    {rating?.toFixed(1) ?? vote?.toFixed(1) ?? "N/A"}
                 </div>
             </div>
 
@@ -100,6 +98,12 @@ const MovieCard = ({ movie }) => {
                 </h4>
 
                 <div className="text-xs font-bold flex justify-between text-gray-300">
+                    {rate && (
+                        <span className="flex items-center gap-1.5">
+                            <VoteIcon className="w-3.5 h-3.5 text-[#FFD60A]" />
+                            {rate}
+                        </span>
+                    )}
                     {runtime > 0 && (
                         <span className="flex items-center gap-1.5">
                             <Clock4 className="w-3.5 h-3.5 text-[#FFD60A]" />

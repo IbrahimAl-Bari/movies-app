@@ -42,9 +42,9 @@ export default function SearchBar() {
     }, [search]);
 
     return (
-        <div className="relative" ref={wrapperRef}>
-            <div className="flex items-center gap-2 border-4 rounded-4xl border-black px-2 py-1 shadow-[4px_4px_0px_0px_#000000]">
-                <Search className="w-5 h-5" />
+        <div className="relative flex justify-center w-full" ref={wrapperRef}>
+            <div className="flex items-center w-[60%] h-10 gap-2 border-4 rounded-4xl border-black m-6 px-3 py-2 shadow-[4px_4px_0px_0px_#000000]">
+                <Search className="w-5 h-5 text-white" />
                 <input
                     value={search}
                     onChange={(e) => {
@@ -63,13 +63,10 @@ export default function SearchBar() {
             </div>
 
             {search.length >= 2 && results.length > 0 && (
-                <div className="absolute mt-2 w-full rounded-sm bg-black z-50">
-                    {loading ? <p className="p-2 text-white/70">Loading...</p> : results.map((movie) => (
-                        <div key={movie.id} onClick={() => { setSearch(""); router.push(`/titles/${movie.id}`); }} className="flex items-center gap-3 p-2 hover:bg-gray-800 cursor-pointer">
-                            <img src={movie.poster || "/no-image.png"} className="w-10 h-14 object-cover rounded-sm border" alt={movie.title} />
-                            <div className="text-white"> <h5 className="font-bold">{movie.title}</h5> <p className="text-gray-400" style={{ fontSize: "1rem" }}>{movie.year}</p> </div>
-                        </div>
-                    ))}
+                <div className="absolute mt-2 w-screen rounded-smbg-black z-50">
+
+
+
                 </div>
             )}
         </div>

@@ -21,6 +21,7 @@ export async function GET() {
     }
 
     const data = await res.json();
+    console.log(data)
 
     const movies = data.results.map((movie: any) => ({
         id: movie.id,
@@ -30,7 +31,8 @@ export async function GET() {
         poster: movie.poster_path
             ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
             : null,
-        averageRating: movie.vote_average,
+        vote_count: movie.vote_count,
+        vote_average: movie.vote_average,
     }));
 
     cache.set(cacheKey, movies);
