@@ -12,8 +12,8 @@ export async function Navigation() {
 
   return (
       <nav className="border-b-[6px] border-black bg-[#111111] px-6 py-2">
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
 
+        <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-5 text-white">
 
             <div className="flex items-center rounded-2xl gap-2 border-4 border-black px-4 py-2 shadow-[4px_4px_0px_0px_#000000]">
@@ -27,7 +27,7 @@ export async function Navigation() {
             <SearchBar />
           </div>
 
-          <div className="hidden items-center gap-8 md:flex">
+          <div className="flex items-center gap-8 max-lg:hidden">
             <Link href="/" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
               Home
             </Link>
@@ -47,7 +47,7 @@ export async function Navigation() {
 
           {user ? (
               <div className="flex items-center gap-4">
-            <span className="font-black text-white tracking-tight max-sm:hidden max-md:flex max-lg:hidden flex gap-3 mr-3 ">
+            <span className="font-black text-white tracking-tight max-sm:hidden max-md:flex flex gap-3 mr-3 ">
               <CircleUserRound />
               {username || 'User'}
             </span>
@@ -66,8 +66,31 @@ export async function Navigation() {
                 Sign Up
               </Link>
           )}
+        </div>
+
+        <div className="mx-auto flex max-w-7xl items-center justify-between">
+
+          <div className="hidden max-lg:flex items-center mt-3 w-full justify-center gap-8 max-md:gap-4 max-sm:text-sm">
+            <Link href="/" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
+              Home
+            </Link>
+            <Link href="/watch" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
+              Watch
+            </Link>
+            <Link href="/collection" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
+              Collection
+            </Link>
+            <Link href="/watchlist" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
+              Watchlist
+            </Link>
+            <Link href="/profile" className="font-black uppercase tracking-tight text-white/70 transition-colors hover:text-[#FFD60A]" style={{ fontWeight: 800 }}>
+              profile
+            </Link>
+          </div>
+
 
         </div>
+
       </nav>
   );
 }

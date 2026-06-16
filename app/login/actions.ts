@@ -1,36 +1,34 @@
 'use server'
 
 import { createClient } from '@/app/utils/supabase/server'
-import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 export async function login(prevState: any, formData: FormData) {
-
     const supabase = await createClient()
 
-    const email = formData.get('email')
-    const password = formData.get('password')
-    const terms = formData.get('terms')
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
 
-    const errors: any = {}
-
-    if (!email) errors.email = true
-    if (!password) errors.password = true
-    if (!terms) return { error: 'You must accept the Terms & Conditions' }
-
-    if (Object.keys(errors).length > 0) {
-        return { fieldErrors: errors }
+    if (!email || !password) {
+        return { error: 'Missing fields' }
     }
 
     const { error } = await supabase.auth.signInWithPassword({
-        email: email as string,
-        password: password as string,
+        email,
+        password,
     })
 
     if (error) {
-        return { error: 'Wrong email or password' }
+        if (error.message.includes('Invalid login credentials')) {
+            return { error: 'No account found with this email. Please sign up first.' }
+        }
+
+        if (error.message.toLowerCase().includes('email not confirmed')) {
+            return { error: 'Please verify your email first.' }
+        }
+
+        return { error: 'Invalid email or password' }
     }
 
-    revalidatePath('/', 'layout')
     redirect('/collection')
 }

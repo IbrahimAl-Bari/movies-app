@@ -1,10 +1,9 @@
 'use server'
 
-import {createClient} from "@/app/utils/supabase/server";
-import {redirect} from "next/navigation";
-import {revalidatePath} from "next/cache";
+import { createClient } from '@/app/utils/supabase/server'
+import { redirect } from 'next/navigation'
 
-export async function signup(formData: FormData) {
+export async function signup(prevState: any, formData: FormData) {
     const supabase = await createClient()
 
     const email = formData.get('email') as string
@@ -12,24 +11,36 @@ export async function signup(formData: FormData) {
     const username = formData.get('username') as string
 
     if (!email || !password || !username) {
-        redirect('/error')
+        return { error: 'Missing fields' }
     }
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-            data: {
-                username: username,
-            },
+            data: { username },
         },
     })
 
     if (error) {
-        console.error('Signup error:', error)
-        redirect(`/error?message=${encodeURIComponent(error.message)}`)
+        if (error.message.includes('User already registered')) {
+            return { error: 'You already have an account. Please log in.' }
+        }
+
+        return { error: error.message }
     }
 
-    revalidatePath('/', 'layout')
-    redirect('/collection')
+    if (data.user && !data.session) {
+        return {
+            error: 'Check your email to verify your account before logging in.',
+        }
+    }
+
+    if (data.session) {
+        redirect('/collection')
+    }
+
+    return {
+        error: 'Signup successful. Please check your email to verify your account.',
+    }
 }

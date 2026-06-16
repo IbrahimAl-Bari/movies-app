@@ -3,7 +3,7 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import MovieCard from "@/app/collection/components-collection/MovieCard";
-import {CircleSlash2, Search} from "lucide-react"
+import {CircleArrowLeft, CircleArrowRight, CircleSlash2, Search} from "lucide-react"
 import Loading from "@/app/loading";
 import SearchBar from "@/app/watch/SearchBar";
 import SeeMore from "@/app/collection/components-collection/SeeMore";
@@ -57,15 +57,26 @@ export default function SearchPage() {
     const searchParams = useSearchParams();
     const query = searchParams.get("q");
 
+    const router = useRouter();
+
+    const handleclick = () => {
+        router.back();
+    }
+
     return (
-        <section className="relative overflow-hidden border-b-[6px] h-screen w-screen z-0 border-black bg-[#111111] px-6">
+        <section className="relative overflow-hidden border-b-[6px] min-h-screen w-screen z-0 border-black bg-[#111111] px-6">
                 <div className={"w-full h-full"}>
 
                     <SearchBar />
 
                     <div className="flex justify-between mt-5 rounded-4xl gap-2 items-center">
                                 <h3 className="text-white text-2xl md:text-3xl font-black" style={{lineHeight: "0.5"}}>Search Results For "{query}" :</h3>
-                        <SeeMore url="/collection-action" />
+                        <button
+                            onClick={handleclick}
+                            className={"text-white flex justify-center items-center gap-2 cursor-pointer underline mr-5"}>
+                            <CircleArrowLeft className={"w-4 h-4 my-auto"}/>
+                            Go Back
+                        </button>
                     </div>
 
 

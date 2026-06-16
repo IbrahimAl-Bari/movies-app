@@ -19,7 +19,7 @@ const SeeMore = ({ url }: SeeMoreProps) => {
         <>
             <button
                 onClick={handleclick}
-                className={"text-white flex justify-center items-center gap-2 cursor-pointer underline"}>
+                className={"text-white flex justify-center items-center gap-2 cursor-pointer underline mr-5"}>
                 See More
                 <CircleArrowRight className={"w-4 h-4 my-auto"}/>
             </button>

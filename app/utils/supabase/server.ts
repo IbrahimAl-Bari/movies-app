@@ -1,3 +1,4 @@
+// app/utils/supabase/server.ts
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
@@ -13,14 +14,11 @@ export async function createClient() {
                     return cookieStore.getAll()
                 },
                 setAll(cookiesToSet) {
-                    try {
-                        cookiesToSet.forEach(({ name, value, options }) =>
+                    cookiesToSet.forEach(({ name, value, options }) => {
+                        try {
                             cookieStore.set(name, value, options)
-                        )
-                    } catch {
-                        // Safe to ignore. If this throws, it means you called setAll from a
-                        // Server Component. The middleware will handle the actual cookie setting.
-                    }
+                        } catch {}
+                    })
                 },
             },
         }

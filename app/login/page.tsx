@@ -3,9 +3,30 @@
 import { useState, useActionState } from 'react'
 import { login } from '@/app/login/actions'
 import { signup } from '@/app/signup/actions'
-import { CircleAlert } from "lucide-react"
+import { CircleAlert, EyeClosed, Eye } from 'lucide-react'
+import { useFormStatus } from 'react-dom'
 
-function SubmitButton({ isSignUp, pending }: { isSignUp: boolean, pending: boolean }) {
+interface FormState {
+    error?: string
+    fieldErrors?: {
+        email?: boolean
+        password?: boolean
+        username?: boolean
+        terms?: boolean
+    }
+}
+
+interface SubmitButtonProps {
+    isSignUp: boolean
+}
+
+interface AuthAction {
+    (prevState: FormState | null, formData: FormData): Promise<FormState | void>
+}
+
+function SubmitButton({ isSignUp }: SubmitButtonProps) {
+    const { pending } = useFormStatus()
+
     return (
         <button
             type="submit"
@@ -18,18 +39,20 @@ function SubmitButton({ isSignUp, pending }: { isSignUp: boolean, pending: boole
 }
 
 export default function AuthForm() {
-
     const [isSignUp, setIsSignUp] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
 
-    const action = isSignUp ? signup : login
-    const [state, formAction] = useActionState(action, null, isSignUp ? "signup" : "login")
+    const action: AuthAction = isSignUp ? signup : login
+    const [state, formAction] = useActionState<FormState | null, FormData>(
+        // @ts-ignore
+        action,
+        null
+    )
 
     return (
         <section className="relative overflow-hidden border-b-[6px] h-screen w-screen z-0 border-black bg-[#111111]">
             <div className="w-full max-w-md mt-5 p-4 m-auto bg-[#FF4D4D] rounded-2xl border-4 border-black shadow-[6px_6px_0px_0px_#FFD60A]">
 
-                {/* TITLE */}
                 <div className="text-center mb-8">
                     <h3 className="font-bold text-4xl text-black mb-2">
                         {isSignUp ? 'Join Our Collection' : 'Welcome Back'}
@@ -41,17 +64,15 @@ export default function AuthForm() {
                     </p>
                 </div>
 
-                {/* GLOBAL ERROR */}
                 {(state?.error || state?.fieldErrors?.terms) && (
                     <div className="w-full bg-yellow-300 flex gap-2 items-center text-black font-bold px-3 py-2 rounded-lg border-2 border-black mb-4">
-                        {state?.error || (state?.fieldErrors?.terms && "You must accept Terms & Conditions")}
+                        {state?.error || (state?.fieldErrors?.terms && 'You must accept Terms & Conditions')}
                         <CircleAlert className="w-5 h-5" />
                     </div>
                 )}
 
                 <form action={formAction} key={isSignUp ? 'signup' : 'login'} className="space-y-5" noValidate>
 
-                    {/* USERNAME */}
                     {isSignUp && (
                         <div>
                             <label className="block text-sm font-medium text-black mb-1">
@@ -67,7 +88,6 @@ export default function AuthForm() {
                         </div>
                     )}
 
-                    {/* EMAIL */}
                     <div>
                         <label className="block text-sm font-medium text-gray-300 mb-1">
                             Email Address
@@ -81,7 +101,6 @@ export default function AuthForm() {
                         />
                     </div>
 
-                    {/* PASSWORD */}
                     <div>
                         <label className="block text-sm font-medium text-gray-300 mb-1">
                             Password
@@ -90,7 +109,7 @@ export default function AuthForm() {
                         <div className="relative">
                             <input
                                 name="password"
-                                type={showPassword ? "text" : "password"}
+                                type={showPassword ? 'text' : 'password'}
                                 className={`w-full px-4 py-3 pr-20 bg-[#111111] text-white border rounded-lg transition-colors
                                 ${state?.fieldErrors?.password ? 'border-red-500 placeholder-red-400' : 'border-[#FFD60A]'}`}
                                 placeholder={state?.fieldErrors?.password ? 'Required field' : '*******'}
@@ -101,19 +120,13 @@ export default function AuthForm() {
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-white/70 hover:text-white"
                             >
-                                {showPassword ? 'Hide' : 'Show'}
+                                {showPassword ? <Eye /> : <EyeClosed />}
                             </button>
                         </div>
                     </div>
 
-                    {/* TERMS */}
                     <div className="flex items-end gap-3 ml-2">
-                        <input
-                            id="terms"
-                            name="terms"
-                            type="checkbox"
-                            className="peer hidden"
-                        />
+                        <input id="terms" name="terms" type="checkbox" className="peer hidden" />
 
                         <label
                             htmlFor="terms"
@@ -133,14 +146,9 @@ export default function AuthForm() {
                         </label>
                     </div>
 
-                    {/* BUTTON */}
-                    <SubmitButton
-                        isSignUp={isSignUp}
-                        pending={false}
-                    />
+                    <SubmitButton isSignUp={isSignUp} />
                 </form>
 
-                {/* SWITCH */}
                 <div className="mt-3 text-center text-sm text-black/70">
                     {isSignUp ? 'Already have an account?' : "Don't have an account?"}
                     <button
