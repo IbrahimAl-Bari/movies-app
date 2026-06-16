@@ -55,6 +55,7 @@ export default function SearchBar() {
                         if (e.key === "Enter" && search.trim() !== "") {
                             setResults([]);
                             router.push(`/search?q=${encodeURIComponent(search.trim())}`);
+                            setSearch("");
                         }
                     }}
                     placeholder="search"

@@ -1,6 +1,14 @@
 import { createClient } from "@/app/utils/supabase/server";
 
 export async function GET() {
+    const supabase = await createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const res = await fetch("https://imdb236.p.rapidapi.com/api/imdb/top250-movies", {
         headers: {
             "X-RapidAPI-Key": process.env.RAPID_API_KEY!,
@@ -9,8 +17,6 @@ export async function GET() {
     });
 
     const data = await res.json();
-
-    const supabase = await createClient();
 
     const payload = data.map((movie: any) => ({
         id: movie.id,

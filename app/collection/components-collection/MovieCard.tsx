@@ -26,7 +26,9 @@ const MovieCard = ({ movie }) => {
     }
 
     const title = movie.primaryTitle || movie.title || "Untitled Masterpiece"
-    const imgUrl = movie.poster || movie.posterUrl || null
+    const imgUrl = movie.poster || movie.posterUrl || movie.poster_path
+        && `https://image.tmdb.org/t/p/w500${movie.poster_path}` || null
+
     const vote = movie.vote_average ? movie.vote_average : null
     const rating = movie.averageRating ? movie.averageRating : null
 
@@ -42,6 +44,8 @@ const MovieCard = ({ movie }) => {
                 ? `${hours}H ${minutes}M`
                 : `${minutes}M`
             : null
+
+    const theyear = movie.year || movie.release_date.split("-")[0];
 
     return (
         <div
@@ -111,10 +115,10 @@ const MovieCard = ({ movie }) => {
                         </span>
                     )}
 
-                    {movie.year && (
+                    {theyear && (
                         <span className="flex items-center gap-1.5">
                             <Calendar className="w-3.5 h-3.5 text-[#FFD60A]" />
-                            {movie.year}
+                            {theyear}
                         </span>
                     )}
                 </div>
