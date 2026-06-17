@@ -3,9 +3,10 @@ import {Star, Calendar, Globe, Clock, DollarSign, TrendingUp, Users, CircleArrow
 import React from "react";
 import BookmarkComp from "@/app/titles/BookmarkComp";
 import GoBack from "@/app/titles/GoBack";
+import AddPost from "@/app/components/AddPost";
 
 type PageProps = {
-    params: Promise<{ id: string }>;
+    params: { id: string };
 };
 
 const TMDB_BASE = "https://api.themoviedb.org/3";
@@ -205,6 +206,12 @@ export default async function MoviePage({ params }: PageProps) {
                     </div>
 
                 </div>
+
+                <h3 className={"pt-10 pb-3"}>Reviews :
+                <br/>
+                    <p>add your own review</p>
+                </h3>
+                <AddPost movieId={movie.id} poster={poster} />
 
             </div>
 

@@ -10,13 +10,19 @@ import AnimationShell from "@/app/collection/components-collection/(shells)/Anim
 
 export default async function DashboardPage() {
     const supabase = await createClient()
+
     const { data: { user } } = await supabase.auth.getUser()
 
-    if (!user) {
-        redirect('/login')
-    }
+    if (!user) redirect('/login')
 
-    const username = user.user_metadata?.username || 'MovieFan'
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .maybeSingle()
+
+
+    const username = profile?.username || 'MovieFan'
 
     return (
         <section className="min-h-screen bg-[#111111] pb-24 px-4 md:px-8 selection:bg-[#FFD60A] selection:text-black">

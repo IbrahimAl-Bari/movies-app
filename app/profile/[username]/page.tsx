@@ -1,6 +1,6 @@
 import { createClient } from '@/app/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import EditProfile from './ui/EditProfile'
+import FollowButton from '../ui/FollowButton'
 import { Star } from "lucide-react"
 import EditAvatar from "@/app/profile/ui/EditAvatar";
 
@@ -51,7 +51,6 @@ export default async function ProfilePage() {
 
                 <div className="absolute w-full bottom-[-90px] left-6 flex items-end gap-4">
 
-
                     <EditAvatar currentUrl={profile?.avatar_url} />
 
                     {/* NAME + BADGE */}
@@ -62,6 +61,12 @@ export default async function ProfilePage() {
                                 NEW
                             </span>
                         </h1>
+
+                        <FollowButton
+                            profileId={profile.id}
+                            currentUserId={currentUserId}
+                            isFollowing={!!isFollowing}
+                        />
 
                     </div>
                 </div>
@@ -77,7 +82,6 @@ export default async function ProfilePage() {
 
                     <div className="flex flex-col md:flex-row md:items-center gap-6 mb-6">
 
-                        <EditProfile profile={profile} />
 
                         <div className="grid grid-cols-4 gap-3 flex-1 text-white max-sm:flex justify-center ">
                             <div className=" w-30 p-3 max-sm:p-0  rounded-lg text-center">
@@ -100,7 +104,7 @@ export default async function ProfilePage() {
                     </div>
 
 
-                        <h4 className="text-white/80">
+                    <h4 className="text-white/80">
                         {profile?.bio || 'No bio yet — tell people your movie taste'}
                     </h4>
 

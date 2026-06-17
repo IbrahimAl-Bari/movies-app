@@ -75,8 +75,6 @@ p { font-size: 0.7rem; font-weight: 700; }
 
 /* Neobrutalism Components */
 .neo-button {
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
     border: 2px solid var(--border);
     background-color: var(--primary);
@@ -93,10 +91,19 @@ p { font-size: 0.7rem; font-weight: 700; }
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0px 0px var(--border);
 }
-
 .neo-card {
     border: 2px solid var(--border);
     background-color: var(--card);
     padding: 1.5rem;
     box-shadow: 8px 8px 0px 0px var(--border);
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }
