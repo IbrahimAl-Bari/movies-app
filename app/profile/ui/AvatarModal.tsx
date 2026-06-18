@@ -31,15 +31,16 @@ export default function AvatarModal({ close, open, setOpen, userId, onSuccess }:
                 fileType: "image/webp",
             });
 
+
             const res = await uploadAvatar(compressedFile, userId);
 
-            if (res?.error) {
+            if (res && "error" in res) {
                 alert(res.error);
                 return;
             }
 
-            if (res?.publicUrl) {
-                onSuccess(res.publicUrl);
+            if (res && "avatarUrl" in res) {
+                onSuccess(res.avatarUrl);
                 router.refresh();
             }
 

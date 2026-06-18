@@ -2,7 +2,7 @@
 
 import { createClient } from "@/app/utils/supabase/server";
 
-export async function createPost(formData: FormData) {
+export async function createPost(formData: FormData): Promise<void> {
     const supabase = await createClient();
 
     const movie_id = formData.get("movie_id") as string;
@@ -12,10 +12,12 @@ export async function createPost(formData: FormData) {
 
     const { data: userData } = await supabase.auth.getUser();
 
-    if (!userData.user) return { error: "Not logged in" };
+    if (!userData.user) {
+        throw new Error("Not logged in");
+    }
 
     if (!movie_id || !content || !rating) {
-        return { error: "Missing fields" };
+        throw new Error("Missing fields");
     }
 
     const { data: user } = await supabase
@@ -31,7 +33,10 @@ export async function createPost(formData: FormData) {
         .single();
 
     const username = user?.username || "Unknown";
-    const avatar_url = avatar?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${username}&backgroundColor=1f2937,111827,0f172a,000000&textColor=FFD60A`
+
+    const avatar_url =
+        avatar?.avatar_url ||
+        `https://api.dicebear.com/7.x/initials/svg?seed=${username}&backgroundColor=1f2937,111827,0f172a,000000&textColor=FFD60A`;
 
     const { error } = await supabase.from("posts").insert({
         user_id: userData.user.id,
@@ -45,8 +50,6 @@ export async function createPost(formData: FormData) {
     });
 
     if (error) {
-        return { error: error.message };
+        throw new Error(error.message);
     }
-
-    return { success: true };
 }
