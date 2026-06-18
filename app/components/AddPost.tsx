@@ -38,7 +38,7 @@ export default function AddPost({ movieId , poster }: { movieId: string , poster
 
                     setRating(value);
                 }}
-                className="w-10 h-10 p-2 ml-2 bg-black border border-[#FFD60A]/50 text-white text-center"
+                className="w-10 h-10 p-1 ml-2 bg-black border border-[#FFD60A]/50 text-white text-center"
             />
 
             <br/>

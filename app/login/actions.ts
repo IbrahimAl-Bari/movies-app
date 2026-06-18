@@ -3,6 +3,7 @@
 import { createClient } from '@/app/utils/supabase/server'
 import { redirect } from 'next/navigation'
 
+
 export async function login(prevState: any, formData: FormData) {
     const supabase = await createClient()
 
@@ -24,11 +25,11 @@ export async function login(prevState: any, formData: FormData) {
 
     if (error) {
         const message = error.message
-        console.log(error.message)
 
         if (message.includes('email not confirmed')) {
             return {
                 error: 'Please verify your email first. Check your inbox and click the verification link before logging in.'
+                ,needsVerification: true
             }
         }
 

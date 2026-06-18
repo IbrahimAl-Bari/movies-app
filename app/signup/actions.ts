@@ -20,6 +20,18 @@ export async function signup(prevState: any, formData: FormData) {
 
     const cleanUsername = username.trim()
 
+    const { data: existingProfile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('username', cleanUsername.toLowerCase())
+        .maybeSingle()
+
+    if (existingProfile) {
+        return {
+            error: 'Username is already taken.'
+        }
+    }
+
     if (cleanUsername.length < 3) {
         return { error: 'Username must be at least 3 characters long.' }
     }
@@ -29,8 +41,8 @@ export async function signup(prevState: any, formData: FormData) {
         return { error: 'Please enter a valid email address.' }
     }
 
-    if (password.length < 6) {
-        return { error: 'Password must be at least 6 characters long.' }
+    if (password.length < 8) {
+        return { error: 'Password must be at least 8 characters long.' }
     }
 
     const { data, error } = await supabase.auth.signUp({
@@ -59,11 +71,13 @@ export async function signup(prevState: any, formData: FormData) {
 
     if (data.user && !data.session) {
         return {
-            success: 'Account created! Check your email for the verification link, then log in.'
+            success: 'Account created! Please verify your email.',
+            email: email
         }
     }
 
     return {
-        success: 'Account created successfully. Please verify your email to continue.',
+        success: 'Account created successfully. Please verify your email.',
+        email: email
     }
 }

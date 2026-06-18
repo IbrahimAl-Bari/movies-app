@@ -10,23 +10,43 @@ export async function createPost(formData: FormData) {
     const content = formData.get("content") as string;
     const rating = Number(formData.get("rating"));
 
-    const { data: user } = await supabase.auth.getUser();
+    const { data: userData } = await supabase.auth.getUser();
 
-    if (!user.user) return { error: "Not logged in" };
+    if (!userData.user) return { error: "Not logged in" };
 
     if (!movie_id || !content || !rating) {
         return { error: "Missing fields" };
     }
 
+    const { data: user } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("id", userData.user.id)
+        .single();
+
+    const { data: avatar } = await supabase
+        .from("profiles")
+        .select("avatar_url")
+        .eq("id", userData.user.id)
+        .single();
+
+    const username = user?.username || "Unknown";
+    const avatar_url = avatar?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${username}&backgroundColor=1f2937,111827,0f172a,000000&textColor=FFD60A`
+
     const { error } = await supabase.from("posts").insert({
-        user_id: user.user.id,
+        user_id: userData.user.id,
         movie_id,
         content,
         rating,
-        poster
+        poster,
+        username,
+        like_count: 0,
+        avatar_url,
     });
 
     if (error) {
         return { error: error.message };
     }
+
+    return { success: true };
 }

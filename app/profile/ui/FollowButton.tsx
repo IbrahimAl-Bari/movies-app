@@ -2,15 +2,20 @@
 
 import { useState, useTransition } from "react";
 import { createClient } from "@/app/utils/supabase/client";
+import {themes} from "@/app/lib/themes";
 
 export default function FollowButton({
                                          profileId,
                                          currentUserId,
-                                         isFollowing: initial
+                                         isFollowing: initial,
+                                         ThemeAccent,
+                                        boxShadow,
                                      }: {
     profileId: string;
     currentUserId: string;
     isFollowing: boolean;
+    ThemeAccent: string;
+    boxShadow: string;
 }) {
     const supabase = createClient();
     const [isFollowing, setIsFollowing] = useState(initial);
@@ -43,11 +48,15 @@ export default function FollowButton({
         <button
             onClick={toggleFollow}
             disabled={loading}
-            className={`px-4 py-2 w-20 h-10 mr-10 flex items-center justify-center border-black shadow-[4px_4px_0px_0px_#FF4D4D] border-4 font-black rounded-lg transition ${
+            className={`px-4 py-2 w-20 h-10 max-xs:w-15 max-xs:text-xs mr-10 flex items-center justify-center shadow-[2px_2px_0px_0px_#ffffff] border-black border-4 font-black rounded-lg transition ${
                 isFollowing
-                    ? "bg-black text-white"
-                    : "bg-[#FFD60A] text-black"
+                    ? `text-white text-sm`
+                    : ` text-black`
             }`}
+            style={{
+                backgroundColor: isFollowing ? ThemeAccent : "#FFD60A",
+                boxShadow: `${boxShadow}`,
+            }}
         >
             {isFollowing ? "Following" : "Follow"}
         </button>

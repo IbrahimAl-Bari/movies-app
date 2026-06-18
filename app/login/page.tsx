@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useActionState } from 'react'
+import { useState, useActionState, useEffect } from 'react'
 import { login } from '@/app/login/actions'
 import { signup } from '@/app/signup/actions'
 import { CircleAlert, EyeClosed, Eye } from 'lucide-react'
@@ -8,6 +8,8 @@ import { useFormStatus } from 'react-dom'
 
 interface FormState {
     error?: string
+    success?: string
+    email?: string
     fieldErrors?: {
         email?: boolean
         password?: boolean
@@ -42,6 +44,10 @@ export default function AuthForm() {
     const [isSignUp, setIsSignUp] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
 
+    const [resendLoading, setResendLoading] = useState(false)
+    const [resendCooldown, setResendCooldown] = useState(0)
+    const [resendMessage, setResendMessage] = useState('')
+
     const action: AuthAction = isSignUp ? signup : login
 
     const [state, formAction] = useActionState<FormState | null, FormData>(
@@ -49,6 +55,45 @@ export default function AuthForm() {
         action,
         null
     )
+
+    useEffect(() => {
+        if (resendCooldown <= 0) return
+
+        const timer = setInterval(() => {
+            setResendCooldown((prev) => prev - 1)
+        }, 1000)
+
+        return () => clearInterval(timer)
+    }, [resendCooldown])
+    async function handleResend(email: string) {
+        if (resendCooldown > 0 || resendLoading) return
+
+        setResendLoading(true)
+        setResendMessage('')
+
+        try {
+            const res = await fetch('/api/auth/resend-verification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            })
+
+            const data = await res.json()
+
+            if (data.success) {
+                setResendMessage('Verification email sent!')
+                setResendCooldown(60)
+            } else {
+                setResendMessage(data.error || 'Something went wrong')
+            }
+        } catch {
+            setResendMessage('Request failed')
+        } finally {
+            setResendLoading(false)
+        }
+    }
 
     return (
         <section className="relative overflow-hidden border-b-[6px] pb-10 w-screen z-0 border-black bg-[#111111]">
@@ -64,6 +109,34 @@ export default function AuthForm() {
                             : 'Enter your details to access your Cinematix.'}
                     </p>
                 </div>
+
+                {state?.success && (
+                    <div className="w-full bg-green-400 text-black font-bold px-3 py-2 rounded-lg border-2 border-black mb-4">
+                        {state.success}
+                    </div>
+                )}
+
+                {isSignUp && state?.success && state?.email && (
+                    <div className="mt-4 text-center">
+                        <button
+                            disabled={resendLoading || resendCooldown > 0}
+                            onClick={() => handleResend(state.email!)}
+                            className="bg-[#FFD60A] text-black font-bold px-3 py-2 rounded-lg border-2 border-black text-sm disabled:opacity-50"
+                        >
+                            {resendLoading
+                                ? 'Sending...'
+                                : resendCooldown > 0
+                                    ? `Resend available in ${resendCooldown}s`
+                                    : 'Resend verification email'}
+                        </button>
+
+                        {resendMessage && (
+                            <h6 className="text-sm text-black mt-2">
+                                {resendMessage}
+                            </h6>
+                        )}
+                    </div>
+                )}
 
                 {(state?.error || state?.fieldErrors?.terms) && (
                     <div className="w-full bg-yellow-300 flex gap-2 items-center text-black font-bold px-3 py-2 rounded-lg border-2 border-black mb-4">
@@ -187,6 +260,12 @@ export default function AuthForm() {
                     >
                         {isSignUp ? 'Sign In' : 'Sign Up'}
                     </button>
+                </div>
+
+                <div className="flex justify-center text-sm">
+                    <a href="/forgot-password" className="text-blue-700 hover:underline">
+                        Forgot Password?
+                    </a>
                 </div>
             </div>
         </section>

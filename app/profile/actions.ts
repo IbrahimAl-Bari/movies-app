@@ -1,6 +1,7 @@
 "use server"
 
 import { createClient } from '@/app/utils/supabase/server'
+import {revalidatePath} from "next/cache";
 
 export async function updateProfile(prevState: any, formData: FormData) {
     const supabase = await createClient()
@@ -30,5 +31,6 @@ export async function updateProfile(prevState: any, formData: FormData) {
         return { error: error.message }
     }
 
-    return { success: 'Profile updated successfully' }
+    return { success: "Profile updated successfully!" };
+
 }

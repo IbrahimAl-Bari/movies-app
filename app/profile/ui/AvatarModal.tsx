@@ -3,16 +3,20 @@
 import { useEffect, useRef, useState } from "react";
 import imageCompression from "browser-image-compression";
 import { uploadAvatar } from "@/app/lib/uploadAvatar";
+import { useRouter } from "next/navigation";
 
 type Props = {
     open: boolean;
     setOpen: (v: boolean) => void;
     close: () => void;
+    userId: string;
+    onSuccess: (url: string) => void; // Added this prop
 };
 
-export default function AvatarModal({ close, open, setOpen }: Props) {
+export default function AvatarModal({ close, open, setOpen, userId, onSuccess }: Props) {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     async function handleFile(file: File) {
         if (!file) return;
@@ -20,25 +24,29 @@ export default function AvatarModal({ close, open, setOpen }: Props) {
         setLoading(true);
 
         try {
-            // 🔥 Compress image before upload
             const compressedFile = await imageCompression(file, {
-                maxSizeMB: 0.25,            // ~250KB target
-                maxWidthOrHeight: 512,      // perfect for avatars
+                maxSizeMB: 0.25,
+                maxWidthOrHeight: 512,
                 useWebWorker: true,
-                fileType: "image/webp",     // modern + small
+                fileType: "image/webp",
             });
 
-            const res = await uploadAvatar(compressedFile);
+            const res = await uploadAvatar(compressedFile, userId);
 
             if (res?.error) {
                 alert(res.error);
                 return;
             }
 
+            if (res?.publicUrl) {
+                onSuccess(res.publicUrl);
+                router.refresh();
+            }
+
             close();
         } catch (err) {
             console.error(err);
-            alert("Image compression failed");
+            alert("Upload failed");
         } finally {
             setLoading(false);
         }
@@ -46,7 +54,6 @@ export default function AvatarModal({ close, open, setOpen }: Props) {
 
     useEffect(() => {
         document.body.style.overflow = open ? "hidden" : "auto";
-
         return () => {
             document.body.style.overflow = "auto";
         };
@@ -65,6 +72,7 @@ export default function AvatarModal({ close, open, setOpen }: Props) {
     return (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 backdrop-blur-sm">
             <div className="bg-[#111] w-[90%] max-w-md p-6 rounded-xl border-4 border-black">
+
                 <h3 className="text-white font-black mb-4">
                     Update Profile Picture
                 </h3>
@@ -76,11 +84,11 @@ export default function AvatarModal({ close, open, setOpen }: Props) {
                         const file = e.dataTransfer.files?.[0];
                         if (file) handleFile(file);
                     }}
-                    className="border-2 border-dashed border-gray-600 p-6 text-center rounded-lg cursor-pointer"
                     onClick={() => inputRef.current?.click()}
+                    className="border-2 border-dashed border-gray-600 p-6 text-center rounded-lg cursor-pointer"
                 >
                     <p className="text-white/70">
-                        Drag & drop image or tap to upload
+                        Drag & drop or click to upload
                     </p>
                 </div>
 

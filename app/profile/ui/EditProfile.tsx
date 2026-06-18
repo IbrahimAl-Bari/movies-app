@@ -13,6 +13,12 @@ export default function EditProfile({ profile }: Props) {
     const [state, formAction] = useActionState(updateProfile, null)
 
     useEffect(() => {
+        if (state?.success) {
+            setIsOpen(false);
+        }
+    }, [state]);
+
+    useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = "hidden";
         } else {
@@ -87,7 +93,7 @@ export default function EditProfile({ profile }: Props) {
                                 defaultValue={profile?.bio}
                                 placeholder="Bio"
                                 rows={4}
-                                className="w-full p-2 bg-black border border-gray-700 rounded"
+                                className="w-full p-2 bg-black border border-gray-700 rounded resize-none"
                             />
 
                             <button
@@ -100,12 +106,6 @@ export default function EditProfile({ profile }: Props) {
                             {state?.error && (
                                 <p className="text-red-400 text-sm">
                                     {state.error}
-                                </p>
-                            )}
-
-                            {state?.success && (
-                                <p className="text-green-400 text-sm">
-                                    {state.success}, please refresh to update
                                 </p>
                             )}
                         </form>
