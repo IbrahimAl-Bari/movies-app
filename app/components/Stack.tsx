@@ -33,9 +33,9 @@ const card2: CardData  = {
     };
 const card3: CardData  = {
         id: 3,
-        title: "Blogs",
+        title: "Review",
         description:
-            "Read insights, reviews, and deep dives into the entertainment world.",
+            "Read insights, hot takes, and deep dives into the entertainment world.",
         color: "#FFFFFF",
         textColor: "#111111",
     };
@@ -59,7 +59,7 @@ interface StackCardProps {
 function StackCard({ card, index, total }: StackCardProps) {
     return (
         <div
-            className=" inset-0 top-50 rounded-[40px] m-10 overflow-hidden shadow-2xl"
+            className=" inset-0 top-50 rounded-[40px] m-10 max-xs:mx-1 overflow-hidden shadow-2xl"
             style={{
                 backgroundColor: card.color,
             }}>

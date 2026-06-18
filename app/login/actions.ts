@@ -1,7 +1,8 @@
-'use server'
+"use server"
 
 import { createClient } from '@/app/utils/supabase/server'
 import { redirect } from 'next/navigation'
+
 
 export async function login(prevState: any, formData: FormData) {
     const supabase = await createClient()
@@ -9,8 +10,12 @@ export async function login(prevState: any, formData: FormData) {
     const email = formData.get('email') as string
     const password = formData.get('password') as string
 
-    if (!email || !password) {
-        return { error: 'Missing fields' }
+    if (!email) return { error: 'Email address is required.' }
+    if (!password) return { error: 'Password is required.' }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+        return { error: 'Please enter a valid email address.' }
     }
 
     const { error } = await supabase.auth.signInWithPassword({
@@ -19,16 +24,22 @@ export async function login(prevState: any, formData: FormData) {
     })
 
     if (error) {
-        if (error.message.includes('Invalid login credentials')) {
-            return { error: 'No account found with this email. Please sign up first.' }
+        const message = error.message
+
+        if (message.includes('email not confirmed')) {
+            return {
+                error: 'Please verify your email first. Check your inbox and click the verification link before logging in.'
+                ,needsVerification: true
+            }
         }
 
-        if (error.message.toLowerCase().includes('email not confirmed')) {
-            return { error: 'Please verify your email first.' }
+        if (message.includes('invalid login credentials')) {
+            return { error: 'Incorrect email or password. Please try again.' }
         }
 
-        return { error: 'Invalid email or password' }
+        return { error: error.message }
     }
 
+    // 6. Success Flow
     redirect('/collection')
 }

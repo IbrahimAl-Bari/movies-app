@@ -16,14 +16,14 @@ export function BoardClient({ data }: { data: any[] }) {
 
     const positions = isMobile
         ? [
-            { x: -90, y: -120, rotate: -8 },
-            { x: 90, y: -60, rotate: 6 },
+            { x: 0, y: -120, rotate: -8 },
+            { x: 0, y: -60, rotate: 6 },
             { x: 0, y: 20, rotate: -3 },
-            { x: -90, y: 110, rotate: 7 },
-            { x: 90, y: 170, rotate: -5 },
+            { x: 0, y: 110, rotate: 7 },
+            { x: 0, y: 170, rotate: -5 },
         ]
         : [
-            { x: -400, y: -20, rotate: -8 },
+            { x: -200, y: -20, rotate: -8 },
             { x: -200, y: 100, rotate: 5 },
             { x: 0, y: 0, rotate: -2 },
             { x: 200, y: 100, rotate: 7 },

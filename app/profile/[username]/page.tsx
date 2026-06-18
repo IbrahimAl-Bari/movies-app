@@ -1,10 +1,11 @@
 import { createClient } from '@/app/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import EditProfile from './ui/EditProfile'
 import { Star } from "lucide-react"
 import EditAvatar from "@/app/profile/ui/EditAvatar";
 import {themes} from "@/app/lib/themes";
+import ThemeButton from "@/app/profile/ui/ThemePicker";
 import ThemePicker from "@/app/profile/ui/ThemePicker";
+import FollowButton from "@/app/profile/ui/FollowButton";
 
 export default async function ProfilePage() {
     const supabase = await createClient()
@@ -20,6 +21,13 @@ export default async function ProfilePage() {
         .maybeSingle()
 
     const currentUserId = user?.id
+
+    const { data: isFollowing } = await supabase
+        .from("follows")
+        .select("*")
+        .eq("follower_id", currentUserId)
+        .eq("following_id", profile?.id)
+        .maybeSingle()
 
     const { count: followersCount } = await supabase
         .from("follows")
@@ -40,7 +48,8 @@ export default async function ProfilePage() {
     const theme =
         themes[profile?.theme_id as keyof typeof themes] ||
         themes.default
-    console.log(profile?.theme_id)
+
+    console.log("theme", theme.accent2)
 
     return (
         <section
@@ -68,7 +77,13 @@ export default async function ProfilePage() {
                 )`
                         }}
                     >
-                        <EditAvatar profile={profile} />
+                        <div className="relative w-28 h-28">
+                            <img
+                                src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${profile?.username}&background=FFD60A&color=000&bold=true`}
+                                className="w-28 h-28 rounded-full border-4 border-black object-cover"
+                            />
+                        </div>
+
                     </div>
 
                     {/* NAME + BADGE */}
@@ -80,7 +95,7 @@ export default async function ProfilePage() {
                             {profile?.username || 'No username yet'}
 
                             <span
-                                className="text-xs px-2 py-1 rounded border-black shadow-[2px_2px_0px_0px_#ffffff] border-4"
+                                className="text-xs px-2 py-1 max-sm:hidden rounded border-black shadow-[2px_2px_0px_0px_#ffffff] border-4"
                                 style={{
                                     backgroundColor: theme.accent2,
                                     color: "#000",
@@ -90,12 +105,21 @@ export default async function ProfilePage() {
                                 NEW
                             </span>
                         </h1>
+
+                        <FollowButton
+                            ThemeAccent={`${theme.accent2}`}
+                            boxShadow={`2px 2px 0 0 ${theme.accent}`}
+                            profileId={profile.id}
+                            currentUserId={currentUserId}
+                            isFollowing={!!isFollowing}
+                        />
+
                     </div>
                 </div>
             </div>
 
             {/* MAIN CONTENT */}
-            <div className="max-w-3xl mt-25 px-6">
+            <div className="max-w-2xl mt-25 px-6">
 
                 {/* BIO + ACTIONS */}
                 <div
@@ -104,7 +128,6 @@ export default async function ProfilePage() {
 
                     <div className="flex flex-col md:flex-row md:items-center gap-6 mb-6">
 
-                        <EditProfile profile={profile} />
 
                         <div
                             className="grid grid-cols-3 gap-3 flex-1 max-sm:flex justify-center"
@@ -145,14 +168,9 @@ export default async function ProfilePage() {
                     </div>
 
                     <h4 style={{ color: theme.muted }}>
-                        {profile?.bio || 'No bio yet — tell people your movie taste'}
+                        {profile?.bio || 'No bio yet — maybe check it back later'}
                     </h4>
                 </div>
-
-                <ThemePicker
-                    userId={user.id}
-                    currentTheme={profile?.theme_id || "default"}
-                />
 
                 <div className="mt-10">
 
