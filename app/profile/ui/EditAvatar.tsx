@@ -5,7 +5,11 @@ import AvatarModal from "./AvatarModal";
 
 // Added TypeScript interface for cleaner props, adjust as needed
 interface Props {
-    profile: any;
+    profile: {
+        id: string;
+        username: string;
+        avatar_url?: string;
+    } | null;
 }
 
 export default function AvatarButton({ profile }: Props) {

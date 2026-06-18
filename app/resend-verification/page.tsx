@@ -31,8 +31,8 @@ export default function ResendVerificationPage() {
 
             const data = await res.json()
 
-            if (data.error) {
-                setError(data.error)
+            if (!res.ok || data.error) {
+                setError(data.error || 'Failed to send verification email')
             } else {
                 setSuccess(
                     'Verification email sent! Check your inbox.'

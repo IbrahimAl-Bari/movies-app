@@ -35,18 +35,20 @@ export default function SearchBar() {
     const fetchResults = async (value: string) => {
         setLoading(true);
 
-        const [moviesRes, usersRes] = await Promise.all([
-            fetch(`/api/search?query=${value}`),
-            fetch(`/api/search-users?query=${value}`)
-        ]);
+        try {
+            const [moviesRes, usersRes] = await Promise.all([
+                fetch(`/api/search?query=${encodeURIComponent(value)}`),
+                fetch(`/api/search-users?query=${encodeURIComponent(value)}`)
+            ]);
 
-        const moviesData = await moviesRes.json();
-        const usersData = await usersRes.json();
+            const moviesData = await moviesRes.json();
+            const usersData = await usersRes.json();
 
-        setResults(moviesData.results || []);
-        setUsers(usersData.results || []);
-
-        setLoading(false);
+            setResults(moviesData.results || []);
+            setUsers(usersData.results || []);
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -67,12 +69,6 @@ export default function SearchBar() {
         };
     }, [search]);
 
-    useEffect(() => {
-        if (search.trim().length < 2) {
-            setResults([]);
-        }
-    }, [search]);
-
     return (
         <div className="relative" ref={wrapperRef}>
             <div className="flex items-center gap-2 border-4 rounded-4xl border-black px-2 py-1 shadow-[4px_4px_0px_0px_#000000]">
@@ -80,8 +76,13 @@ export default function SearchBar() {
                 <input
                     value={search}
                     onChange={(e) => {
-                        setSearch(e.target.value);
-                        if (e.target.value.trim() === "" && pathname === "/search") router.back();
+                        const newValue = e.target.value;
+                        setSearch(newValue);
+                        if (newValue.trim().length < 2) {
+                            setResults([]);
+                            setUsers([]);
+                        }
+                        if (newValue.trim() === "" && pathname === "/search") router.back();
                     }}
                     onKeyDown={(e) => {
                         if (e.key === "Enter" && search.trim() !== "") {

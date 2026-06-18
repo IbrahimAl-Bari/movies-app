@@ -1,6 +1,6 @@
 "use client"
 
-import {useEffect, useState, useTransition} from "react"
+import {useState, useTransition} from "react"
 import { useRouter } from "next/navigation"
 import { themes } from "@/app/lib/themes"
 import { setTheme } from "@/app/lib/theme"
@@ -28,10 +28,6 @@ export default function ThemePicker({
             router.refresh()
         })
     }
-
-    useEffect(() => {
-        setSelected(currentTheme)
-    }, [currentTheme])
 
     return (
         <div className="mt-5">

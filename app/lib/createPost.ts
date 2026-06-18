@@ -7,7 +7,7 @@ export async function createPost(formData: FormData): Promise<void> {
 
     const movie_id = formData.get("movie_id") as string;
     const poster = (formData.get("poster") as string) || "/no-image.png";
-    const content = formData.get("content") as string;
+    const content = (formData.get("content") as string || "").trim();
     const rating = Number(formData.get("rating"));
 
     const { data: userData } = await supabase.auth.getUser();
@@ -18,6 +18,10 @@ export async function createPost(formData: FormData): Promise<void> {
 
     if (!movie_id || !content || !rating) {
         throw new Error("Missing fields");
+    }
+
+    if (rating < 1 || rating > 5) {
+        throw new Error("Rating must be between 1 and 5");
     }
 
     const { data: user } = await supabase

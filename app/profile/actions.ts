@@ -18,14 +18,19 @@ export async function updateProfile(prevState: any, formData: FormData) {
         return { error: 'Not authenticated' }
     }
 
+    const updateData: { id: string; username: string; bio: string; avatar_url?: string } = {
+        id: user.id,
+        username,
+        bio,
+    }
+
+    if (avatar_url) {
+        updateData.avatar_url = avatar_url
+    }
+
     const { error } = await supabase
         .from('profiles')
-        .upsert({
-            id: user.id,
-            username,
-            bio,
-            avatar_url
-        })
+        .upsert(updateData)
 
     if (error) {
         return { error: error.message }
