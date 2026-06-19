@@ -1,14 +1,13 @@
 import { createClient } from '@/app/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { Star } from "lucide-react"
-import EditAvatar from "@/app/profile/ui/EditAvatar";
 import {themes} from "@/app/lib/themes";
-import ThemeButton from "@/app/profile/ui/ThemePicker";
-import ThemePicker from "@/app/profile/ui/ThemePicker";
 import FollowButton from "@/app/profile/ui/FollowButton";
 
-export default async function ProfilePage() {
+export default async function ProfilePage({ params }: { params: Promise<{ username: string }>
+}) {
     const supabase = await createClient()
+    const { username } = await params
 
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -17,7 +16,7 @@ export default async function ProfilePage() {
     const { data: profile } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', user.id)
+        .eq('username', username)
         .maybeSingle()
 
     const currentUserId = user?.id
@@ -48,8 +47,6 @@ export default async function ProfilePage() {
     const theme =
         themes[profile?.theme_id as keyof typeof themes] ||
         themes.default
-
-    console.log("theme", theme.accent2)
 
     return (
         <section

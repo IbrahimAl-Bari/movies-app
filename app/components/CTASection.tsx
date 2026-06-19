@@ -22,9 +22,9 @@ export function CTASection() {
             <span className="font-black uppercase tracking-tight text-black" style={{ fontWeight: 900 }}>Limited Offer</span>
           </div>
 
-          <h2 className="mb-6 h2-cta max-xs:text-3xl font-black uppercase leading-none tracking-tight text-white">
+          <h5 className="mb-6 h2-cta max-xs:text-5xl text-7xl font-black uppercase leading-none tracking-tight text-white">
             Ready To Start Your Cinematic Journey?
-          </h2>
+          </h5>
 
           <p className="mb-10 font-bold text-white/70" style={{ fontSize: '1.5rem', fontWeight: 700 }}>
             Join thousands of movie lovers. Stream unlimited films for free for 30 days.

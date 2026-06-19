@@ -5,9 +5,6 @@ export async function POST(req: Request) {
     try {
         const { email } = await req.json()
 
-        console.log('Email:', email)
-        console.log('SITE_URL:', process.env.NEXT_PUBLIC_SITE_URL)
-
         const supabase = await createClient()
 
         const { error } =
