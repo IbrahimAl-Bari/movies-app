@@ -21,21 +21,30 @@ export default async function ProfilePage() {
 
     const currentUserId = user?.id
 
-    const { count: followersCount } = await supabase
-        .from("follows")
-        .select("*", { count: "exact", head: true })
-        .eq("following_id", profile?.id)
+    let followersCount = 0
+    let followingCount = 0
+    let posts: any[] = []
 
-    const { count: followingCount } = await supabase
-        .from("follows")
-        .select("*", { count: "exact", head: true })
-        .eq("follower_id", profile?.id)
+    if (profile) {
+        const { count: followers } = await supabase
+            .from("follows")
+            .select("*", { count: "exact", head: true })
+            .eq("following_id", profile.id)
+        followersCount = followers || 0
 
-    const { data: posts } = await supabase
-        .from("posts")
-        .select("*")
-        .eq("user_id", profile?.id)
-        .order("created_at", { ascending: false })
+        const { count: following } = await supabase
+            .from("follows")
+            .select("*", { count: "exact", head: true })
+            .eq("follower_id", profile.id)
+        followingCount = following || 0
+
+        const { data: postsData } = await supabase
+            .from("posts")
+            .select("*")
+            .eq("user_id", profile.id)
+            .order("created_at", { ascending: false })
+        posts = postsData || []
+    }
 
     const theme =
         themes[profile?.theme_id as keyof typeof themes] ||

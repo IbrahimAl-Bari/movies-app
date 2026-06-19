@@ -25,7 +25,7 @@ export async function POST(req: Request) {
         console.error('Route crashed:', err)
 
         return NextResponse.json({
-            error: String(err),
+            error: 'An error occurred while processing your request.',
         })
     }
 }

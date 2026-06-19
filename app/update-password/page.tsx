@@ -17,23 +17,27 @@ export default function UpdatePasswordPage() {
         setError('')
         setSuccess('')
 
-        const supabase = createClient()
+        try {
+            const supabase = createClient()
 
-        const { error } = await supabase.auth.updateUser({
-            password,
-        })
+            const { error } = await supabase.auth.updateUser({
+                password,
+            })
 
-        if (error) {
-            setError(error.message)
-        } else {
-            setSuccess('Password updated successfully!')
+            if (error) {
+                setError(error.message)
+            } else {
+                setSuccess('Password updated successfully!')
 
-            setTimeout(() => {
-                window.location.href = '/'
-            }, 3000)
+                setTimeout(() => {
+                    window.location.href = '/'
+                }, 3000)
+            }
+        } catch (err) {
+            setError('An unexpected error occurred')
+        } finally {
+            setLoading(false)
         }
-
-        setLoading(false)
     }
 
     useEffect(() => {
@@ -62,13 +66,19 @@ export default function UpdatePasswordPage() {
                 )}
 
                 <form onSubmit={handleUpdate} className="space-y-4">
-                    <input
-                        type="password"
-                        placeholder="New password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-3 bg-[#111111] text-white border border-[#FFD60A] rounded-lg"
-                    />
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-black mb-2">
+                            New Password
+                        </label>
+                        <input
+                            id="password"
+                            type="password"
+                            placeholder="New password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-4 py-3 bg-[#111111] text-white border border-[#FFD60A] rounded-lg"
+                        />
+                    </div>
 
                     <button
                         disabled={loading}

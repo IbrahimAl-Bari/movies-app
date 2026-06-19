@@ -28,8 +28,8 @@ export default function ForgotPasswordPage() {
 
             const data = await res.json()
 
-            if (data.error) {
-                setError(data.error)
+            if (!res.ok || data.error) {
+                setError(data.error || 'Failed to send reset email')
             } else {
                 setSuccess(
                     'Password reset email sent! Check your inbox and spam folder.'

@@ -18,13 +18,19 @@ export async function signup(prevState: any, formData: FormData) {
         return { error: 'You must accept the Terms of Service to continue.' }
     }
 
-    const cleanUsername = username.trim()
+    const cleanUsername = username.trim().toLowerCase()
 
-    const { data: existingProfile } = await supabase
+    const { data: existingProfile, error: lookupError } = await supabase
         .from('profiles')
         .select('id')
-        .eq('username', cleanUsername.toLowerCase())
+        .eq('username', cleanUsername)
         .maybeSingle()
+
+    if (lookupError) {
+        return {
+            error: 'Unable to check username availability. Please try again.'
+        }
+    }
 
     if (existingProfile) {
         return {
