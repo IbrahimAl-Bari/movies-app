@@ -99,11 +99,15 @@ export default async function MoviePage({ params }: PageProps) {
 
     const supabase = await createClient()
 
-    const { data: posts } = await supabase
+    const { data: posts, error: postsError } = await supabase
         .from("posts")
         .select("*")
         .eq("movie_id", movie.id)
         .order("created_at", { ascending: false })
+
+    if (postsError) {
+        console.error("Error fetching posts:", postsError)
+    }
 
     const { data: user } = await supabase.auth.getUser();
 
@@ -225,7 +229,7 @@ export default async function MoviePage({ params }: PageProps) {
                 <br/>
                     <p>add your own review</p>
                 </h3>
-                <AddPost movieId={movie.id} poster={poster} />
+                {userId && <AddPost movieId={movie.id} poster={poster} />}
 
 
                 <div className="space-y-4 mt-10">

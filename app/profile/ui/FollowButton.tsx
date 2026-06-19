@@ -24,7 +24,7 @@ export default function FollowButton({
     const toggleFollow = async () => {
         startTransition(async () => {
             if (isFollowing) {
-                await supabase
+                const { error } = await supabase
                     .from("follows")
                     .delete()
                     .match({
@@ -32,14 +32,18 @@ export default function FollowButton({
                         following_id: profileId
                     });
 
-                setIsFollowing(false);
+                if (!error) {
+                    setIsFollowing(false);
+                }
             } else {
-                await supabase.from("follows").insert({
+                const { error } = await supabase.from("follows").insert({
                     follower_id: currentUserId,
                     following_id: profileId
                 });
 
-                setIsFollowing(true);
+                if (!error) {
+                    setIsFollowing(true);
+                }
             }
         });
     };

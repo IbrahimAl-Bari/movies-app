@@ -8,7 +8,7 @@ export function BoardClient({ data }: { data: any[] }) {
     const [isMobile, setIsMobile] = useState<boolean>(false);
 
     useEffect(() => {
-        const check = () => setIsMobile(window.innerWidth < 768);
+        const check = () => setIsMobile(window.innerWidth < 480);
         check();
         window.addEventListener("resize", check);
         return () => window.removeEventListener("resize", check);
@@ -16,14 +16,14 @@ export function BoardClient({ data }: { data: any[] }) {
 
     const positions = isMobile
         ? [
-            { x: 0, y: -120, rotate: -8 },
-            { x: 0, y: -60, rotate: 6 },
-            { x: 0, y: 20, rotate: -3 },
-            { x: 0, y: 110, rotate: 7 },
-            { x: 0, y: 170, rotate: -5 },
+            { x: -0, y: 0, rotate: -8 },
+            { x: 0, y: -0, rotate: 6 },
+            { x: 0, y: 0, rotate: -3 },
+            { x: -0, y: 0, rotate: 7 },
+            { x: 0, y: 0, rotate: -5 },
         ]
         : [
-            { x: -200, y: -20, rotate: -8 },
+            { x: -400, y: -20, rotate: -8 },
             { x: -200, y: 100, rotate: 5 },
             { x: 0, y: 0, rotate: -2 },
             { x: 200, y: 100, rotate: 7 },
@@ -74,7 +74,7 @@ linear-gradient(90deg, rgba(255,214,10,0.1) 1px, transparent 1px)
                                 <img
                                     src={item.primaryImage}
                                     alt={item.originalTitle || "Unknown Title"}
-                                    className="w-40 mt-1 h-40 max-sm:h-25 max-md:w-30 max-md:h-40 object-cover rounded-[10px]"
+                                    className="w-40 mt-1 h-40 max-sm:h-25 max-md:w-30 max-md:h-30 object-cover rounded-[10px]"
                                     draggable={false}
                                 />
 

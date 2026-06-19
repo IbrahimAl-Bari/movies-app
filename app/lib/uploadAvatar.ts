@@ -2,12 +2,17 @@
 
 import { createClient } from "@/app/utils/supabase/server";
 
-export async function uploadAvatar(file: File,userId: string) {
+export async function uploadAvatar(file: File, userId: string) {
     const supabase = await createClient();
 
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return { error: "Not authenticated" };
+    }
 
     const fileExt = file.name.split(".").pop();
-    const fileName = `${userId}-${Date.now()}.${fileExt}`;
+    const fileName = `${user.id}-${Date.now()}.${fileExt}`;
 
     const { error: uploadError } = await supabase
         .storage
@@ -31,7 +36,7 @@ export async function uploadAvatar(file: File,userId: string) {
     const { error: updateError } = await supabase
         .from("profiles")
         .update({ avatar_url: avatarUrl })
-        .eq("id", userId);
+        .eq("id", user.id);
 
     if (updateError) {
         return { error: updateError.message };
