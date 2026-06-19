@@ -31,18 +31,18 @@ export default function ResendVerificationPage() {
 
             const data = await res.json()
 
-            if (data.error) {
-                setError(data.error)
-            } else {
-                setSuccess(
-                    'Verification email sent! Check your inbox.'
-                )
+            if (!res.ok) {
+                setError(data.error || 'Failed to send email')
+                return
             }
-        } catch {
-            setError('Something went wrong.')
-        }
 
-        setLoading(false)
+            setSuccess(data.success)
+        } catch (err) {
+            console.error(err)
+            setError('Something went wrong.')
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
