@@ -49,7 +49,6 @@ export async function createPost(formData: FormData): Promise<void> {
         rating,
         poster,
         username,
-        like_count: 0,
         avatar_url,
     });
 

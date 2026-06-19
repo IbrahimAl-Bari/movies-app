@@ -19,8 +19,8 @@ const SeeLess = ({ url }: SeeLessProps) => {
         <>
             <button
                 onClick={handleclick}
-                className={"text-white flex justify-center items-center gap-2 cursor-pointer underline mr-5"}>
-                <CircleArrowLeft className={"w-4 h-4 my-auto"}/>
+                className={"text-white max-sm:text-sm flex max-sm:mr-0 justify-center items-center gap-2 cursor-pointer underline mr-5"}>
+                <CircleArrowLeft className={"w-4 max-sm:w-7 h-4 my-auto"}/>
                 See Less
             </button>
         </>

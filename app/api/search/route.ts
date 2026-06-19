@@ -14,11 +14,13 @@ export async function GET(req: Request) {
         return NextResponse.json({ results: cache.get(query) });
     }
 
-    const API_KEY = process.env.TMDB_KEY; // server-side key (NOT NEXT_PUBLIC)
+    const API_KEY = process.env.TMDB_KEY;
     const BASE_URL = "https://api.themoviedb.org/3";
 
     const res = await fetch(
-        `${BASE_URL}/search/multi?query=${encodeURIComponent(query)}&api_key=${API_KEY}`
+        `${BASE_URL}/search/multi?query=${encodeURIComponent(query)}&api_key=${API_KEY}`, {
+            next: { revalidate: 60 }
+        }
     );
 
     if (!res.ok) {

@@ -9,9 +9,9 @@ export async function GET(req: Request) {
 
     const { data } = await supabase
         .from("profiles")
-        .select("id, username, avatar_url")
+        .select("id, username, avatar_url, created_at")
         .ilike("username", `%${query}%`)
-        .limit(5);
+        .limit(3);
 
     return NextResponse.json({ results: data || [] });
 }

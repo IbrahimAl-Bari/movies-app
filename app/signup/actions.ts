@@ -41,6 +41,9 @@ export async function signup(prevState: any, formData: FormData) {
     if (cleanUsername.length < 3) {
         return { error: 'Username must be at least 3 characters long.' }
     }
+    if (cleanUsername.length > 12) {
+        return { error: 'Username must be more than 12 characters long.' }
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {

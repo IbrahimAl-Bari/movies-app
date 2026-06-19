@@ -13,7 +13,9 @@ export async function GET() {
     const BASE_URL = "https://api.themoviedb.org/3";
 
     const res = await fetch(
-        `${BASE_URL}/discover/movie?api_key=${API_KEY}&sort_by=vote_average.desc&vote_count.gte=1000`
+        `${BASE_URL}/discover/movie?api_key=${API_KEY}&sort_by=vote_average.desc&vote_count.gte=1000`, {
+            next: { revalidate: 60 * 24 }
+        }
     );
 
     if (!res.ok) {

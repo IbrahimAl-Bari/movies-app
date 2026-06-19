@@ -46,14 +46,51 @@ export default function EditProfile({ profile }: Props) {
         };
     }, [isOpen]);
 
+    const canEdit =
+        !profile.last_profile_update ||
+        Date.now() - new Date(profile.last_profile_update).getTime() >
+         24 * 60 * 60 * 1000;
+
+    const [timeLeft, setTimeLeft] = useState("");
+
+    useEffect(() => {
+        if (!profile.last_profile_update) return;
+
+        const updateTime = () => {
+            const diff =
+                24 * 60 * 60 * 1000 -
+                (Date.now() - new Date(profile.last_profile_update).getTime());
+
+            if (diff <= 0) {
+                setTimeLeft("0m");
+                return;
+            }
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor(
+                (diff % (1000 * 60 * 60)) / (1000 * 60)
+            );
+
+            setTimeLeft(`${hours}h ${minutes}m`);
+        };
+
+        updateTime();
+
+        const interval = setInterval(updateTime, 60000);
+
+        return () => clearInterval(interval);
+    }, [profile.last_profile_update]);
+
     return (
         <div>
+            <h5 className={"text-center text-white/80"}>Only Once a Day</h5>
             {/* BUTTON */}
             <button
-                onClick={() => setIsOpen(!isOpen)}
+                disabled={!canEdit}
+                onClick={() => canEdit  && setIsOpen(!isOpen)}
                 className="bg-[#FFD60A] flex items-center justify-center border-black shadow-[4px_4px_0px_0px_#FF4D4D] border-4 font-black text-black px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
             >
-                Edit Profile
+                {canEdit ? "Edit Profile" : `Edit available in ${timeLeft}`}
             </button>
 
             {/* MODAL */}
