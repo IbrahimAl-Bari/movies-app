@@ -33,14 +33,14 @@ export function CTASection() {
           <div className="flex flex-wrap items-center justify-center gap-4">
             <button
                 onClick={handleClick}
-                className="flex items-center gap-2 border-[6px] border-black bg-[#FFD60A] px-10 py-5 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FF4D4D] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[8px_8px_0px_0px_#FF4D4D]" style={{ fontWeight: 900, fontSize: '1.25rem' }}>
+                className="flex items-center max-sm:px-4 max-sm:py-2 gap-2 border-[6px] border-black bg-[#FFD60A] px-10 py-5 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FF4D4D] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[8px_8px_0px_0px_#FF4D4D]" style={{ fontWeight: 900, fontSize: '1.25rem' }}>
               <Play className="h-7 w-7 fill-current" />
               Start For Free
             </button>
 
             <button
                 onClick={handleClickLearn}
-                className="flex items-center gap-2 border-[6px] border-black bg-white px-10 py-5 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FFD60A] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[8px_8px_0px_0px_#000000]" style={{ fontWeight: 900, fontSize: '1.25rem' }}>
+                className="flex items-center max-sm:px-5 max-sm:py-2 gap-2 border-[6px] border-black bg-white px-10 py-5 font-black uppercase tracking-tight text-black shadow-[8px_8px_0px_0px_#FFD60A] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[8px_8px_0px_0px_#000000]" style={{ fontWeight: 900, fontSize: '1.25rem' }}>
               Learn More
               <ArrowRight className="h-7 w-7" />
             </button>

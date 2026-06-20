@@ -8,6 +8,8 @@ export default function AddPost({ movieId , poster }: { movieId: string , poster
     const [rating, setRating] = useState(5);
     const [isPending, startTransition] = useTransition();
 
+    const MAX_CHARS = 300;
+
     return (
         <div>
         <form action={(formData) => {
@@ -23,28 +25,44 @@ export default function AddPost({ movieId , poster }: { movieId: string , poster
                 name="content"
                 placeholder="Write your review..."
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
+                onChange={(e) => {
+                    const value = e.target.value;
+
+                    if (value.length <= MAX_CHARS) {
+                        setContent(value);
+                    } else {
+                        setContent(value.slice(0, MAX_CHARS));
+                    }
+                }}
                 className="w-full p-2 bg-black border border-[#FFD60A]/50 text-white resize-none"
             />
 
-            <span>On a Scale from 1 to 10 rate this title :</span>
+            <div className="flex items-center justify-between text-sm">
+                <div className="flex items-center gap-2">
+                  <span className="tex-white text-lg">
+                       Rate this title from 1 to 10 :
+                     </span>
 
-            <input
-                name="rating"
-                type="number"
-                min={0}
-                max={10}
-                value={rating}
-                onChange={(e) => {
-                    let value = Number(e.target.value);
+                    <input
+                        name="rating"
+                        type="number"
+                        min={1}
+                        max={10}
+                        value={rating}
+                        onChange={(e) => {
+                            let value = Number(e.target.value);
+                            if (value > 10) value = 10;
+                            if (value < 1) value = 1;
+                            setRating(value);
+                        }}
+                        className="text-lg w-10 h-10 p-1 bg-black border border-[#FFD60A]/50 text-white text-center"
+                    />
+                </div>
 
-                    if (value > 10) value = 10;
-                    if (value < 1) value = 1;
-
-                    setRating(value);
-                }}
-                className="w-10 h-10 p-1 ml-2 bg-black border border-[#FFD60A]/50 text-white text-center"
-            />
+                <div className={`${content.length >= MAX_CHARS ? "text-red-500" : "text-gray-400"}`}>
+                    {content.length} / {MAX_CHARS}
+                </div>
+            </div>
 
             <br/>
 

@@ -59,7 +59,7 @@ interface StackCardProps {
 function StackCard({ card, index, total }: StackCardProps) {
     return (
         <div
-            className=" inset-0 top-50 rounded-[40px] m-10 max-xs:mx-1 overflow-hidden shadow-2xl"
+            className=" inset-0 top-50 rounded-[40px] m-10 max-sm:mx-1 overflow-hidden shadow-2xl"
             style={{
                 backgroundColor: card.color,
             }}>

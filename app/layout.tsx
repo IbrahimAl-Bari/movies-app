@@ -49,7 +49,7 @@ export default function RootLayout({
             className={`h-full antialiased`}>
         <body className="min-h-full flex flex-col">
 
-        <main className="relative overflow-hidden">
+        <main className="relative overflow-hidden pb-10">
             <Navigation />
             <Suspense fallback={<Loading />}>
                 {children}

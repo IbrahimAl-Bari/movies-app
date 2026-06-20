@@ -19,10 +19,12 @@ async function fetchTMDB(path: string, cacheSeconds = 86400) {
     const apiKey = process.env.TMDB_KEY;
     if (!apiKey) throw new Error("Missing TMDB_KEY");
 
-    const res = await fetch(
-        `${TMDB_BASE}${path}&api_key=${apiKey}`,
-        { next: { revalidate: cacheSeconds } }
-    );
+    const url = new URL(`${TMDB_BASE}${path}`);
+    url.searchParams.set("api_key", apiKey);
+
+    const res = await fetch(url.toString(), {
+        next: { revalidate: cacheSeconds }
+    });
 
     if (!res.ok) return null;
     return res.json();
@@ -33,11 +35,15 @@ async function getTmdbFromImdb(imdbId: string) {
         `/find/${imdbId}?external_source=imdb_id`
     );
 
-    return data?.movie_results?.[0]?.id || null;
+    return (
+        data?.movie_results?.[0]?.id ||
+        data?.tv_results?.[0]?.id ||
+        null
+    )
 }
 
 async function getMovie(id: string | number) {
-    return fetchTMDB(`/movie/${id}?`);
+    return fetchTMDB(`/movie/${id}?`) || fetchTMDB(`/tv/${id}?`)
 }
 
 /* ------------------------- FORMATTERS ------------------------- */
@@ -95,7 +101,7 @@ export default async function MoviePage({ params }: PageProps) {
     const vote = movie.vote_average ? movie.vote_average : null
     const rating = movie.averageRating ? movie.averageRating : null
 
-    const watch = `https://streamimdb.ru/embed/movie/${movie.id}`
+    const watch = `https://vidfast.pro/movie/${movie.id}?autoPlay=true`
 
     const supabase = await createClient()
 

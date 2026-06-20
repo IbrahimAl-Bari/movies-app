@@ -1,5 +1,7 @@
 import MovieCard from "@/app/collection/components-collection/MovieCard"
 import SearchBar from "@/app/watch/SearchBar";
+import {createClient} from "@/app/utils/supabase/server";
+import {redirect} from "next/navigation";
 
 async function getMovies() {
     const res = await fetch("http://localhost:3000/api/movies", {
@@ -11,6 +13,12 @@ async function getMovies() {
 }
 
 export default async function Home() {
+    const supabase = await createClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) redirect('/login')
+    
     const movies = await getMovies()
 
     return (

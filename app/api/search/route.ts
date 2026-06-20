@@ -1,8 +1,28 @@
 import { NextResponse } from "next/server";
+import { rateLimit } from "@/app/lib/rate-limit";
 
-const cache = new Map<string, any[]>();
+const cache = new Map<
+    string,
+    {
+        data: any[];
+        expires: number;
+    }
+>();
+
+const CACHE_TIME = 60 * 1000;
 
 export async function GET(req: Request) {
+    const ip =
+        req.headers.get("x-forwarded-for") ||
+        "unknown";
+
+    if (!rateLimit(ip, 30, 60000)) {
+        return NextResponse.json(
+            { error: "Too many requests" },
+            { status: 429 }
+        );
+    }
+
     const { searchParams } = new URL(req.url);
     const query = searchParams.get("query");
 
@@ -10,8 +30,12 @@ export async function GET(req: Request) {
         return NextResponse.json({ results: [] });
     }
 
-    if (cache.has(query)) {
-        return NextResponse.json({ results: cache.get(query) });
+    const cached = cache.get(query);
+
+    if (cached && cached.expires > Date.now()) {
+        return NextResponse.json({
+            results: cached.data,
+        });
     }
 
     const API_KEY = process.env.TMDB_KEY;
@@ -19,7 +43,7 @@ export async function GET(req: Request) {
 
     const res = await fetch(
         `${BASE_URL}/search/multi?query=${encodeURIComponent(query)}&api_key=${API_KEY}`, {
-            next: { revalidate: 60 }
+            next: { revalidate: 60  }
         }
     );
 
@@ -28,7 +52,6 @@ export async function GET(req: Request) {
     }
 
     const data = await res.json();
-    console.log(data)
 
     const movies = data.results.slice(0, 3).map((movie: any) => ({
         id: movie.id,
@@ -39,7 +62,10 @@ export async function GET(req: Request) {
             : "/no-image.png",
     }));
 
-    cache.set(query, movies);
+    cache.set(query, {
+        data: movies,
+        expires: Date.now() + CACHE_TIME,
+    });
 
     return NextResponse.json({ results: movies });
 }

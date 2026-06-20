@@ -96,7 +96,7 @@ export default function AuthForm() {
     }
 
     return (
-        <section className="relative overflow-hidden border-b-[6px] pb-10 w-screen z-0 border-black bg-[#111111]">
+        <section className="relative px-5 overflow-hidden border-b-[6px] pb-10 w-screen z-0 border-black bg-[#111111]">
             <div className="w-full max-w-md mt-5 p-4 m-auto bg-[#FF4D4D] rounded-2xl border-4 border-black shadow-[6px_6px_0px_0px_#FFD60A]">
 
                 <div className="text-center mb-8">
@@ -121,7 +121,7 @@ export default function AuthForm() {
                         <button
                             disabled={resendLoading || resendCooldown > 0}
                             onClick={() => handleResend(state.email!)}
-                            className="bg-[#FFD60A] text-black font-bold px-3 py-2 rounded-lg border-2 border-black text-sm disabled:opacity-50"
+                            className="bg-[#FFD60A] text-black font-bold px-3 py-2 rounded-lg border-2  border-black text-sm disabled:opacity-50"
                         >
                             {resendLoading
                                 ? 'Sending...'

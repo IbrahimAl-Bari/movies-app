@@ -83,7 +83,7 @@ export default function EditProfile({ profile }: Props) {
 
     return (
         <div>
-            <h5 className={"text-center text-white/80"}>Only Once a Day</h5>
+            <h5 className={"text-center max-sm:pl-2 max-sm:text-start text-white/80"}>Only Once a Day</h5>
             {/* BUTTON */}
             <button
                 disabled={!canEdit}
