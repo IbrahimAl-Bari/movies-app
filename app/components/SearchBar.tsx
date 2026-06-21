@@ -4,7 +4,7 @@ import { Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
-type Movie = { id: string; title: string; year: number; poster: string; };
+type Movie = { id: string; title: string; year: number; poster: string; media_type: string; first_air_date: string; name: string; };
 type User = {
     id: string
     username: string
@@ -153,12 +153,14 @@ export default function SearchBar() {
                                         Movies
                                     </p>
 
-                                    {results.map((movie) => (
+                                    {results.slice(0,3).map((movie) => {
+                                        const mediaType = movie.media_type || (movie.first_air_date || movie.name ? "tv" : "movie")
+                                        return (
                                         <div
                                             key={movie.id}
                                             onClick={() => {
                                                 setSearch("");
-                                                router.push(`/titles/${movie.id}`);
+                                                router.push(`/titles/${mediaType}/${movie.id}`);
                                             }}
                                             className="flex items-center gap-3 p-2 hover:bg-gray-800 cursor-pointer"
                                         >
@@ -175,7 +177,7 @@ export default function SearchBar() {
                                                 </p>
                                             </div>
                                         </div>
-                                    ))}
+                                        ) })}
                                 </div>
                             )}
                         </>

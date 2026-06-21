@@ -23,7 +23,7 @@ export default function NavLinks({ avatar }: NavLinksProps) {
         <>
             {/* DESKTOP LINKS */}
             <div className="flex items-center gap-8 max-lg:hidden">
-                <Link href="/" className={getLinkClass("/")} style={{ fontWeight: 800 }}>Home</Link>
+                <Link href="/home" className={getLinkClass("/home")} style={{ fontWeight: 800 }}>Home</Link>
                 <Link href="/watch" className={getLinkClass("/watch")} style={{ fontWeight: 800 }}>Watch</Link>
                 <Link href="/collection" className={getLinkClass("/collection")} style={{ fontWeight: 800 }}>Collection</Link>
                 <Link href="/watchlist" className={getLinkClass("/watchlist")} style={{ fontWeight: 800 }}>Watchlist</Link>
@@ -34,7 +34,7 @@ export default function NavLinks({ avatar }: NavLinksProps) {
             <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden border-t-[6px] border-black bg-[#111111] px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.3)]">
                 <div className="mx-auto flex max-w-7xl items-center justify-around gap-2 text-sm max-xs:text-xs">
 
-                    <Link href="/" className={getLinkClass("/")}>
+                    <Link href="/home" className={getLinkClass("/home")}>
                         <House
                             className="h-6 w-6"
                             strokeWidth={pathname === "/" ? 2.5 : 2}

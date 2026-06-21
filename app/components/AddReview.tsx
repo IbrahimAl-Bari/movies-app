@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { createPost } from "@/app/lib/createPost";
+import { createReview } from "@/app/lib/createReview";
 
-export default function AddPost({ movieId , poster }: { movieId: string , poster: string}) {
+export default function AddReview({ movieId , poster }: { movieId: string , poster: string}) {
     const [content, setContent] = useState("");
     const [rating, setRating] = useState(5);
     const [isPending, startTransition] = useTransition();
@@ -14,7 +14,7 @@ export default function AddPost({ movieId , poster }: { movieId: string , poster
         <div>
         <form action={(formData) => {
             startTransition(async () => {
-                await createPost(formData);
+                await createReview(formData);
             });
         }} className="space-y-2 w-[50%]">
 
@@ -69,7 +69,7 @@ export default function AddPost({ movieId , poster }: { movieId: string , poster
             <button
                 type="submit"
                 disabled={isPending}
-                className="bg-[#FFD60A] text-black font-black px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                className="bg-[#FFD60A] cursor-pointer text-black font-black px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed">
                 {isPending ? "Posting..." : "Post"}
             </button>
         </form>

@@ -42,6 +42,7 @@ export default async function ProfilePage() {
             .from("posts")
             .select("*")
             .eq("user_id", profile.id)
+            .not("movie_id", "is", null)
             .order("created_at", { ascending: false })
         posts = postsData || []
     }
@@ -53,7 +54,7 @@ export default async function ProfilePage() {
 
     return (
         <section
-            className="min-h-screen w-full text-white"
+            className="min-h-screen pb-6 w-full text-white"
             style={{ backgroundColor: theme.bg }}
         >
 
@@ -188,7 +189,7 @@ export default async function ProfilePage() {
                         {posts?.map((post) => (
                             <div
                                 key={post.id}
-                                className="w-full md:w-[60%] rounded-xl overflow-hidden hover:border-[#FFD60A]/40 transition-all duration-200"
+                                className="w-full mt-5 md:w-[60%] rounded-xl overflow-hidden hover:border-[#FFD60A]/40 transition-all duration-200"
                                 style={{
                                     backgroundColor: theme.surface
                                 }}

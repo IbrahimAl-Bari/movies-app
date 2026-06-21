@@ -53,14 +53,38 @@ export async function GET(req: Request) {
 
     const data = await res.json();
 
-    const movies = data.results.slice(0, 3).map((movie: any) => ({
-        id: movie.id,
-        title: movie.title || movie.original_name,
-        year: movie.release_date?.split("-")[0]  || movie.first_air_date?.split("-")[0] || "N/A",
-        poster: movie.poster_path
-            ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
-            : "/no-image.png",
-    }));
+    const movies = data.results
+        .filter(
+            (item: any) =>
+                item.media_type === "movie" ||
+                item.media_type === "tv"
+        )
+        .slice(0, 10)
+        .map((movie: any) => ({
+            id: movie.id,
+
+            title:
+                movie.title ||
+                movie.name ||
+                movie.original_name,
+
+            year:
+                movie.release_date?.split("-")[0] ||
+                movie.first_air_date?.split("-")[0] ||
+                "N/A",
+
+            poster: movie.poster_path
+                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                : "/no-image.png",
+
+            vote_average: movie.vote_average,
+            vote_count: movie.vote_count,
+
+            media_type: movie.media_type,
+
+            release_date: movie.release_date,
+            first_air_date: movie.first_air_date,
+        }))
 
     cache.set(query, {
         data: movies,

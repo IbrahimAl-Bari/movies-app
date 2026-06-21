@@ -14,38 +14,41 @@ const MovieCard = ({ movie }) => {
         state.isSaved(movie.id)
     )
 
-
     // @ts-ignore
     const handleBookmark = (e) => {
         e.stopPropagation()
         toggleMovie(movie)
     }
 
+    const mediaType = movie.media_type || (movie.first_air_date || movie.name ? "tv" : "movie")
+
     const handleClick = () => {
-        router.push(`/titles/${movie.id}`)
+        router.push(`/titles/${mediaType}/${movie.id}`)
     }
 
-    const title = movie.primaryTitle || movie.title || "Untitled Masterpiece"
-    const imgUrl = movie.poster || movie.posterUrl || movie.poster_path
-        && `https://image.tmdb.org/t/p/w500${movie.poster_path}` || null
+    const title = movie.primaryTitle || movie.title || movie.name || "Untitled Masterpiece"
+
+    const imgUrl = movie.poster || movie.posterUrl ||
+        (movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : null)
 
     const vote = movie.vote_average ? movie.vote_average : null
     const rating = movie.averageRating ? movie.averageRating : null
 
-    const runtime = movie.runtimeMinutes ?? 0
-    const hours = Math.floor(runtime / 60)
-    const minutes = runtime % 60
+    const rawRuntime = movie.runtimeMinutes || movie.runtime || (movie.episode_run_time && movie.episode_run_time[0]) || 0
+    const hours = Math.floor(rawRuntime / 60)
+    const minutes = rawRuntime % 60
 
     const rate = movie.vote_count
 
     const formattedRuntime =
-        runtime > 0
+        rawRuntime > 0
             ? hours > 0
                 ? `${hours}H ${minutes}M`
                 : `${minutes}M`
             : null
 
-    const theyear = movie.year || movie.release_date.split("-")[0];
+    const releaseDateStr = movie.release_date || movie.first_air_date || "";
+    const theyear = movie.year || (releaseDateStr ? releaseDateStr.split("-")[0] : null);
 
     return (
         <div
@@ -72,7 +75,6 @@ const MovieCard = ({ movie }) => {
                     </div>
                 )}
 
-                {/* Bookmark */}
                 <div
                     onClick={handleBookmark}
                     className={`absolute top-2 left-2 border-2 flex items-center gap-1 border-black px-1.5 py-0.5 text-xs font-black shadow-[3px_3px_0px_0px_#000000]
@@ -86,7 +88,6 @@ const MovieCard = ({ movie }) => {
                     />
                 </div>
 
-                {/* Rating */}
                 <div className="absolute top-2 right-2 border-2 flex items-center gap-1 border-black bg-[#FFD60A] px-1.5 py-0.5 text-xs font-black text-black shadow-[3px_3px_0px_0px_#000000]">
                     <Star className="w-3 h-3 fill-black" />
                     {rating?.toFixed(1) ?? vote?.toFixed(1) ?? "N/A"}
@@ -108,7 +109,7 @@ const MovieCard = ({ movie }) => {
                             {rate}
                         </span>
                     )}
-                    {runtime > 0 && (
+                    {rawRuntime > 0 && (
                         <span className="flex items-center gap-1.5">
                             <Clock4 className="w-3.5 h-3.5 text-[#FFD60A]" />
                             {formattedRuntime}

@@ -1,58 +1,71 @@
-"use server";
+"use server"
 
-import { createClient } from "@/app/utils/supabase/server";
+import { createClient } from "@/app/utils/supabase/server"
+import { revalidatePath } from "next/cache"
 
-export async function createPost(formData: FormData): Promise<void> {
-    const supabase = await createClient();
+export async function createFeedPost(formData: FormData) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
 
-    const movie_id = formData.get("movie_id") as string;
-    const poster = (formData.get("poster") as string) || "/no-image.png";
-    const content = (formData.get("content") as string || "").trim();
-    const rating = Number(formData.get("rating"));
-
-    const { data: userData } = await supabase.auth.getUser();
-
-    if (!userData.user) {
-        throw new Error("Not logged in");
+    if (!user) {
+        return { error: "You must be logged in to post." }
     }
 
-    if (!movie_id || !content || !rating) {
-        throw new Error("Missing fields");
+    const content = formData.get("content") as string
+    const imageFile = formData.get("image") as File | null
+    let image_url = null
+
+    const entries = Array.from(formData.entries());
+    console.log("FORM DATA ENTRIES:", entries);
+
+    console.log("IMAGE FILE RECEIVED:", imageFile);
+
+    // 1. Handle Image Upload
+    if (imageFile && imageFile.size > 0 && imageFile.type.startsWith("image/")) {
+        const fileExt = imageFile.name.split('.').pop()
+        const fileName = `${user.id}/${Date.now()}.${fileExt}`
+
+        const { error: uploadError } = await supabase.storage
+            .from('posts') // Ensure this bucket exists and is public
+            .upload(fileName, imageFile)
+
+        if (!uploadError) {
+            const { data } = supabase.storage.from('posts').getPublicUrl(fileName)
+            image_url = data.publicUrl
+        }
     }
 
-    if (rating < 1 || rating > 5) {
-        throw new Error("Rating must be between 1 and 5");
+    if (!content || content.trim() === "") {
+        return { error: "Post cannot be empty." }
     }
-
-    const { data: user } = await supabase
-        .from("profiles")
-        .select("username")
-        .eq("id", userData.user.id)
-        .single();
 
     const { data: avatar } = await supabase
         .from("profiles")
         .select("avatar_url")
-        .eq("id", userData.user.id)
+        .eq("id", user.id)
         .single();
 
-    const username = user?.username || "Unknown";
-
+    const username = user.user_metadata?.username || user.user_metadata?.full_name || "Anonymous User"
     const avatar_url =
         avatar?.avatar_url ||
         `https://api.dicebear.com/7.x/initials/svg?seed=${username}&backgroundColor=1f2937,111827,0f172a,000000&textColor=FFD60A`;
 
-    const { error } = await supabase.from("posts").insert({
-        user_id: userData.user.id,
-        movie_id,
-        content,
-        rating,
-        poster,
-        username,
-        avatar_url,
-    });
+    // 2. Insert into database with the image_url
+    const { error } = await supabase
+        .from("feed_posts")
+        .insert({
+            user_id: user.id,
+            username: username,
+            avatar_url: avatar_url,
+            content: content,
+            image_url: image_url // Now this will contain the public URL string
+        })
 
     if (error) {
-        throw new Error(error.message);
+        console.error("Insert error:", error)
+        return { error: "Failed to post. Try again." }
     }
+
+    revalidatePath("/home")
+    return { success: true }
 }

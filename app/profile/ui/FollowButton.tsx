@@ -52,7 +52,7 @@ export default function FollowButton({
         <button
             onClick={toggleFollow}
             disabled={loading}
-            className={`px-4 py-2 w-20 h-10 max-xs:w-15 max-xs:text-xs mr-10 flex items-center justify-center shadow-[2px_2px_0px_0px_#ffffff] border-black border-4 font-black rounded-lg transition ${
+            className={`px-4 py-2 cursor-pointer w-20 h-10 max-xs:w-15 max-xs:text-xs mr-10 flex items-center justify-center shadow-[2px_2px_0px_0px_#ffffff] border-black border-4 font-black rounded-lg transition ${
                 isFollowing
                     ? `text-white text-sm`
                     : ` text-black`
