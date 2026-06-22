@@ -4,6 +4,10 @@ import StoriesBar from "@/app/components/StoriesBar";
 import PostPlus from "@/app/components/PostPlus";
 import LikeButton from "@/app/components/LikeButton";
 
+type Likes = {
+   user_id: string;
+}
+
 export default async function FeedPage() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -22,7 +26,7 @@ export default async function FeedPage() {
             ...post,
             likesCount: post.post_likes.length,
             isLiked: post.post_likes.some(
-                (like) => like.user_id === user?.id
+                (like: Likes) => like.user_id === user?.id
             ),
         })) || [];
 
