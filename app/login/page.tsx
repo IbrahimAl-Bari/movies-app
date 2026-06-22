@@ -5,6 +5,7 @@ import { login } from '@/app/login/actions'
 import { signup } from '@/app/signup/actions'
 import { CircleAlert, EyeClosed, Eye } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
+import { createClient } from '@/app/utils/supabase/client'
 
 interface FormState {
     error?: string
@@ -41,6 +42,21 @@ function SubmitButton({ isSignUp }: SubmitButtonProps) {
 }
 
 export default function AuthForm() {
+    const supabase = createClient()
+
+    const signInWithGoogle = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin}/auth/callback`,
+            },
+        })
+
+        if (error) {
+            console.error(error.message)
+        }
+    }
+
     const [isSignUp, setIsSignUp] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
 
@@ -99,7 +115,8 @@ export default function AuthForm() {
         <section className="relative px-5 overflow-hidden border-b-[6px] pb-10 w-screen z-0 border-black bg-[#111111]">
             <div className="w-full max-w-md mt-5 p-4 m-auto bg-[#FF4D4D] rounded-2xl border-4 border-black shadow-[6px_6px_0px_0px_#FFD60A]">
 
-                <div className="text-center mb-8">
+
+                <div className="text-center mb-4">
                     <h3 className="font-bold text-4xl text-black mb-2">
                         {isSignUp ? 'Join Our Collection' : 'Welcome Back'}
                     </h3>
@@ -115,6 +132,15 @@ export default function AuthForm() {
                         {state.success}
                     </div>
                 )}
+
+                <button
+                    type="button"
+                    onClick={signInWithGoogle}
+                    className="w-full flex items-center justify-center gap-3 my-4 py-3 px-4 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                    <img className={"w-4 h-4"} src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Google_Favicon_2025.svg/960px-Google_Favicon_2025.svg.png" alt="G"/>
+                    Continue with Google
+                </button>
 
                 {isSignUp && state?.success && state?.email && (
                     <div className="mt-4 text-center">

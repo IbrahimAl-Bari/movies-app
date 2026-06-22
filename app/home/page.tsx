@@ -3,6 +3,7 @@ import Link from "next/link"
 import StoriesBar from "@/app/components/StoriesBar";
 import PostPlus from "@/app/components/PostPlus";
 import LikeButton from "@/app/components/LikeButton";
+import {redirect} from "next/navigation";
 
 type Likes = {
    user_id: string;
@@ -11,6 +12,8 @@ type Likes = {
 export default async function FeedPage() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) redirect('/login')
 
     const { data: posts, error } = await supabase
         .from("feed_posts")

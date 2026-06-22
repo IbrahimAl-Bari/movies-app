@@ -19,8 +19,6 @@ export default async function ProfilePage() {
         .eq('id', user.id)
         .maybeSingle()
 
-    const currentUserId = user?.id
-
     let followersCount = 0
     let followingCount = 0
     let posts: any[] = []

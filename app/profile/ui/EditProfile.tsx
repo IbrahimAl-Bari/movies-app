@@ -142,7 +142,7 @@ export default function EditProfile({ profile }: Props) {
 
                             {state?.error && (
                                 <p className="text-red-400 text-sm">
-                                    {state.error}
+                                    {state.error === "duplicate key value violates unique constraint \"profiles_username_key\"" ? "username already exists" : state.error}
                                 </p>
                             )}
                         </form>
