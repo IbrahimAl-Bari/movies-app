@@ -21,7 +21,6 @@ export default function WatchlistPage() {
                 ) : (
                     // @ts-ignore
                     watchlist.map((movie) => {
-                        console.log(movie);
                         return (
                             <MovieCard key={movie.id || movie.imdbId} movie={movie}/>
                         )

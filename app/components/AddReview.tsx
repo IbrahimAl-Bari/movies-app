@@ -37,9 +37,9 @@ export default function AddReview({ movieId , poster }: { movieId: string , post
                 className="w-full p-2 bg-black border border-[#FFD60A]/50 text-white resize-none"
             />
 
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="tex-white text-lg">
+                  <span className="tex-white text-lg max-sm:text-md">
                        Rate this title from 1 to 10 :
                      </span>
 
@@ -59,7 +59,7 @@ export default function AddReview({ movieId , poster }: { movieId: string , post
                     />
                 </div>
 
-                <div className={`${content.length >= MAX_CHARS ? "text-red-500" : "text-gray-400"}`}>
+                <div className={`max-sm:hidden ${content.length >= MAX_CHARS ? "text-red-500" : "text-gray-400"}`}>
                     {content.length} / {MAX_CHARS}
                 </div>
             </div>

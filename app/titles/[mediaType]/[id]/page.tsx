@@ -124,7 +124,6 @@ export default async function MediaPage({ params }: PageProps) {
     const { data: user } = await supabase.auth.getUser();
     const userId = user?.user?.id;
 
-    console.log(media)
 
     return (
         <section className="min-h-screen w-screen bg-[#111111] text-white">

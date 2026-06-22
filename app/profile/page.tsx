@@ -50,7 +50,6 @@ export default async function ProfilePage() {
     const theme =
         themes[profile?.theme_id as keyof typeof themes] ||
         themes.default
-    console.log(profile?.theme_id)
 
     return (
         <section

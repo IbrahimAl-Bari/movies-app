@@ -40,10 +40,6 @@ export default function UpdatePasswordPage() {
         }
     }
 
-    useEffect(() => {
-        console.log('update-password page loaded')
-    }, [])
-
     return (
         <section className="w-screen min-h-screen bg-[#111111] flex items-center justify-center px-4">
             <div className="w-full max-w-md bg-[#FF4D4D] border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_#FFD60A] p-5">

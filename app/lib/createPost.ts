@@ -16,9 +16,6 @@ export async function createFeedPost(formData: FormData) {
     let image_url = null
 
     const entries = Array.from(formData.entries());
-    console.log("FORM DATA ENTRIES:", entries);
-
-    console.log("IMAGE FILE RECEIVED:", imageFile);
 
     // 1. Handle Image Upload
     if (imageFile && imageFile.size > 0 && imageFile.type.startsWith("image/")) {

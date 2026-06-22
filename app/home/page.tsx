@@ -1,8 +1,8 @@
-import CreatePost from "@/app/components/CreatePost"
 import { createClient } from "@/app/utils/supabase/server"
 import Link from "next/link"
 import StoriesBar from "@/app/components/StoriesBar";
 import PostPlus from "@/app/components/PostPlus";
+import LikeButton from "@/app/components/LikeButton";
 
 export default async function FeedPage() {
     const supabase = await createClient()
@@ -10,12 +10,21 @@ export default async function FeedPage() {
 
     const { data: posts, error } = await supabase
         .from("feed_posts")
-        .select("*")
+        .select(`*,  post_likes(user_id) `)
         .order("created_at", { ascending: false })
 
     if (error) {
         console.error("Error fetching feed:", error)
     }
+
+    const feedPosts =
+        posts?.map((post) => ({
+            ...post,
+            likesCount: post.post_likes.length,
+            isLiked: post.post_likes.some(
+                (like) => like.user_id === user?.id
+            ),
+        })) || [];
 
     const { data: follows } = await supabase
         .from("follows")
@@ -49,7 +58,7 @@ export default async function FeedPage() {
                         </div>
                     )}
 
-                    {posts?.map((post) => {
+                    {feedPosts?.map((post) => {
                         // Format the date nicely
                         const date = new Date(post.created_at).toLocaleDateString("en-US", {
                             month: "short",
@@ -61,7 +70,7 @@ export default async function FeedPage() {
                         return (
                             <div
                                 key={post.id}
-                                className="border-[3px] md:border-4 border-black bg-[#1a1a1a] shadow-[6px_6px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_#FFD60A] transition-all duration-200 p-4 md:p-6"
+                                className="border-[3px]  md:border-4 border-black bg-[#1a1a1a] shadow-[6px_6px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_#FFD60A] transition-all duration-200 p-4 md:p-6"
                             >
                                 {/* USER INFO ROW */}
                                 <div className="flex items-center justify-between mb-4">
@@ -84,6 +93,13 @@ export default async function FeedPage() {
                                             </span>
                                         </div>
                                     </div>
+
+                                    <LikeButton
+                                        postId={post.id}
+                                        userId={user!.id}
+                                        initialLiked={post.isLiked}
+                                        initialCount={post.likesCount}
+                                    />
                                 </div>
 
                                 {/* POST CONTENT */}

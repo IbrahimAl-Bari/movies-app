@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { createClient } from "@/app/utils/supabase/client";
-import {themes} from "@/app/lib/themes";
+import {useRouter} from "next/navigation";
 
 export default function FollowButton({
                                          profileId,
@@ -21,6 +21,8 @@ export default function FollowButton({
     const [isFollowing, setIsFollowing] = useState(initial);
     const [loading, startTransition] = useTransition();
 
+    const router = useRouter();
+
     const toggleFollow = async () => {
         startTransition(async () => {
             if (isFollowing) {
@@ -34,6 +36,7 @@ export default function FollowButton({
 
                 if (!error) {
                     setIsFollowing(false);
+                    router.refresh();
                 }
             } else {
                 const { error } = await supabase.from("follows").insert({
@@ -43,6 +46,7 @@ export default function FollowButton({
 
                 if (!error) {
                     setIsFollowing(true);
+                    router.refresh();
                 }
             }
         });
