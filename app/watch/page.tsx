@@ -4,9 +4,11 @@ import {createClient} from "@/app/utils/supabase/server";
 import {redirect} from "next/navigation";
 
 async function getMovies() {
-    const res = await fetch("http://localhost:3000/api/movies", {
+
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const res = await fetch(`${baseUrl}/api/movies`, {
         next: { revalidate: 86400 }
-    })
+    });
 
     const data = await res.json()
     return data.results || []

@@ -9,9 +9,14 @@ export async function login(prevState: any, formData: FormData) {
 
     const email = formData.get('email') as string
     const password = formData.get('password') as string
+    const terms = formData.get('terms') as string
 
     if (!email) return { error: 'Email address is required.' }
     if (!password) return { error: 'Password is required.' }
+
+    if (!terms || terms !== 'on') {
+        return { error: 'You must accept the Terms of Service to continue.' }
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
@@ -41,5 +46,5 @@ export async function login(prevState: any, formData: FormData) {
     }
 
     // 6. Success Flow
-    redirect('/collection')
+    redirect('/home')
 }
